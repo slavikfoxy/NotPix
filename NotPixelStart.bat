@@ -1,0 +1,1 @@
+py -3.11 "C:\Users\oliyn\OneDrive\Documents\PYTHON PROJEKT\YouTube-NotPixel2.0\main.py" -a 1
