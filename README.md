@@ -1,7 +1,7 @@
-# 🔥 АвтоФарм NotPixel 🔥
+#  АвтоФарм NotPix 
 
 ## YouTube - https://www.youtube.com/@rmsudo
-## NotPixel bot - https://t.me/notpixel/app?startapp=f5064842218
+## NotPixel bot - https://t.me/notpixel/app?startapp=777
 
 ## Features  
 | Возможности                                               |Поддерживает|
