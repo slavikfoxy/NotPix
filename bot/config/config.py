@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     # Время между циклами(Чтобы не забанило). Можно оставить без изменения
     SLEEP_TIME: list[int] = [2700, 4200]
     # Задержка перед началом
-    START_DELAY: list[int] = [9, 79]
+    START_DELAY: list[int] = [9, 145]
     # Выполнять ли таски автоматически
     AUTO_TASK: bool = True
     # не трогать
