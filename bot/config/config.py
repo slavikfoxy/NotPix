@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     # Автоматически Собирать намайненые награды
     CLAIM_REWARD: bool = True
     # Автоматически обновлять бусты
-    AUTO_UPGRADE: bool = False
+    AUTO_UPGRADE: bool = True
     # не трогать
     IGNORED_BOOSTS: list[str] = ['paintReward']
     IN_USE_SESSIONS_PATH: str = 'bot/config/used_sessions.txt'
