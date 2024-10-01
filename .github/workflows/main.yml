@@ -2,7 +2,7 @@ name: "Auto NotPix"
 
 on:
   schedule:
-    - cron: "5, 11-22 * * *"  # Minute/Hour/Day/Month/Weekday (UTC)
+    - cron: "14, 12-22 * * *"  # Minute/Hour/Day/Month/Weekday (UTC)
   workflow_dispatch:
 permissions:
   contents: write
