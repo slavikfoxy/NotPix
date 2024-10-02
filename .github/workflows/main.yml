@@ -24,6 +24,7 @@ jobs:
       - name: Copy file from another location
         run: |
           cp sessionsMain/accountsHeyahFox.json sessions/accounts.json
+          cp sessionsMain/HeyahFox.session sessions/HeyahFox.session
 
       - name: Install dependencies
         run: |
