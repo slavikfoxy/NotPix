@@ -8,7 +8,7 @@ from bot.utils.launcher import process
 
 async def main():
     try:
-        await asyncio.wait_for(process(), timeout=90.0)  # Тайм-аут 10 секунд
+        await asyncio.wait_for(process(), timeout=100.0)  # Тайм-аут 10 секунд
     except asyncio.TimeoutError:
         logger.warning("<r>Bot stopped due to timeout...</r>")
         # Можна коректно завершити роботу без виклику sys.exit(1)
