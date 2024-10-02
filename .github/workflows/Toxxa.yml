@@ -1,8 +1,8 @@
-name: "Auto NotPix2"
+name: "Auto NotPix Toxxa"
 
 on:
   schedule:
-    - cron: "0 0 1 * *"  # Minute/Hour/Day/Month/Weekday (UTC)
+    - cron: "21, 4-11 * * *"  # Minute/Hour/Day/Month/Weekday (UTC)
   workflow_dispatch:
 permissions:
   contents: write
@@ -20,10 +20,11 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.11
-
+          
       - name: Copy file from another location
         run: |
-          cp sessions/accounts2.json sessions/accounts.json
+          cp sessionsMain/accountsToxxa.json sessions/accounts.json
+          cp sessionsMain/Toxxa.session sessions/Toxxa.session
 
       - name: Install dependencies
         run: |
