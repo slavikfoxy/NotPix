@@ -1,7 +1,8 @@
 #  АвтоФарм NotPix 
 
 ## YouTube - https://www.youtube.com/@rmsudo
-## NotPixel bot - https://t.me/notpixel/app?startapp=777
+## NotPixel bot - https://t.me/notpixel/app?startapp=
+## https://github.com/observernear/YouTube/tree/NotPixel2.0
 
 ## Features  
 | Возможности                                               |Поддерживает|
