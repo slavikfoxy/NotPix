@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     IN_USE_SESSIONS_PATH: str = 'bot/config/used_sessions.txt'
     NIGHT_MODE: bool = True
     # Время когда бот должен спать(анти бан). Можно оставить без изменения(Время указано в формате UTC)
-    NIGHT_TIME: list[int] = [0, 6]
+    NIGHT_TIME: list[int] = [0, 5]
     # не трогать
     NIGHT_CHECKING: list[int] = [3600, 7200]
 
