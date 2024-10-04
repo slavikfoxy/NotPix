@@ -9,6 +9,9 @@ from multiprocessing.util import debug
 from time import time
 from urllib.parse import unquote, quote
 
+from PIL import Image
+import io
+
 import brotli
 import aiohttp
 from aiohttp_proxy import ProxyConnector
@@ -274,27 +277,93 @@ class Tapper:
             logger.error(f"{self.session_name} | Unknown error when processing tasks: {error}")
 
 
+    async def get_image(self, http_client, url):
+        """Завантажує зображення за URL."""
+        try:
+            async with http_client.get(url) as response:
+                if response.status == 200:
+                    img_data = await response.read()
+                    img = Image.open(io.BytesIO(img_data))
+                    return img
+                else:
+                    raise Exception(f"Failed to download image from {url}, status: {response.status}")
+        except Exception as error:
+            logger.error(f"{self.session_name} | Error loading image: {error}")
+            return None
+
+    async def compare_images(self, base_image, overlay_image, x_offset, y_offset):
+        """Порівнює два зображення та повертає список змінених пікселів."""
+        changes = []
+        for x in range(overlay_image.width):
+            for y in range(overlay_image.height):
+                base_pixel = base_image.getpixel((x + x_offset, y + y_offset))
+                overlay_pixel = overlay_image.getpixel((x, y))
+                if base_pixel != overlay_pixel:
+                    # Додаємо змінений піксель і його колір
+                    changes.append((x + x_offset, y + y_offset, overlay_pixel))
+        #logger.info(f"{self.session_name} | changes: {changes}")
+        return changes
+
+    async def paint_changes(self, http_client, changes):
+        """Малює пікселі, які не збігаються."""
+        colors = (
+    "#e67b7a", "#f7cf44", "#b6f07c", "#4dd9c8", "#8ac2ff", "#d5affd", "#ffc3a1", "#ffffff", 
+    "#b41233", "#ff8f1c", "#20c080", "#69e4f4", "#5474f2", "#bc63ea", "#ff58a7", "#7e8387",
+    "#701522", "#cb5914", "#218b6a", "#38776c", "#6c4ce9", "#9229a3", "#da277f", "#875231",
+    "#510411", "#b44e12", "#1a7550", "#1f5e5c", "#752fbb", "#8e2b8d", "#961554", "#4c351a",
+    "#000000"
+)
+
+        for change in changes:
+            stats = await http_client.get('https://notpx.app/api/v1/mining/status')
+            stats.raise_for_status()  # Піднімемо виняток у випадку неуспішного статусу
+            stats_json = await stats.json()
+            charges = stats_json['charges']  # Отримуємо кількість доступних "зарядів" (малювань)
+            logger.info(f"{self.session_name} | stats_json['charges'] == : {charges}")
+            if charges > 0:
+                x, y, color_rgb = change
+                color_hex = '#{:02x}{:02x}{:02x}'.format(*color_rgb)
+                try:
+                    paint_request = await http_client.post('https://notpx.app/api/v1/repaint/start', 
+                                                           json={"pixelId": int(f"{x}{y}")+1, "newColor": {color_hex}})
+                    if paint_request.status == 200:
+                        # Якщо статус 200 OK, то отримайте відповідь
+                        response_data = await paint_request.json()  # Або .text() для текстової відповіді
+                        logger.info(f"{self.session_name} | response_data == : {response_data}")
+                    paint_request.raise_for_status()
+                    logger.success(f"{self.session_name} | Painted {x} {y} with color {color_hex}")
+                    await asyncio.sleep(delay=randint(5, 10))
+                except Exception as error:
+                    logger.error(f"{self.session_name} | Error painting pixel: {error}")
+
     async def paint(self, http_client: aiohttp.ClientSession):
         try:
+            # Перевірка статусу на сервері
             stats = await http_client.get('https://notpx.app/api/v1/mining/status')
-            stats.raise_for_status()
+            stats.raise_for_status()  # Піднімемо виняток у випадку неуспішного статусу
             stats_json = await stats.json()
-            charges = stats_json['charges']
-            colors = ("#9C6926", "#00CCC0", "#bf4300",
-                      "#FFFFFF", "#000000", "#6D001A")
-            color = random.choice(colors)
+            charges = stats_json['charges']  # Отримуємо кількість доступних "зарядів" (малювань)
 
-            for _ in range(charges):
-                x, y = randint(30, 970), randint(30, 970)
-                if randint(0, 10) == 5:
-                    color = random.choice(colors)
-                    logger.info(f"{self.session_name} | Изменен цвет на {color}")
-                paint_request = await http_client.post('https://notpx.app/api/v1/repaint/start',
-                                                       json={"pixelId": int(f"{x}{y}")+1, "newColor": color})
-                paint_request.raise_for_status()
-                logger.success(f"{self.session_name} | Painted {x} {y} with color {color}")
-                await asyncio.sleep(delay=randint(5, 10))
+            # Якщо є "заряди", запускаємо малювання
+            if charges > 0:
+                base_image_url = 'https://image.notpx.app/api/v2/image'
+                overlay_image_url = 'https://app.notpx.app/assets/worldtemplate2-B7WvoJMz.png'
+                x_offset, y_offset = 372, 372
 
+                # Завантажуємо базове та накладене зображення
+                base_image = await self.get_image(http_client, base_image_url)
+                overlay_image = await self.get_image(http_client, overlay_image_url)
+
+                if base_image and overlay_image:
+                    # Порівняння зображень і отримання змінених пікселів
+                    changes = await self.compare_images(base_image, overlay_image, x_offset, y_offset)
+
+                    # Малюємо змінені пікселі
+                    await self.paint_changes(http_client, changes)
+                else:
+                    logger.error(f"{self.session_name} | Failed to load images.")
+            else:
+                logger.info(f"{self.session_name} | No charges available for painting.")
         except Exception as error:
             logger.error(f"{self.session_name} | Unknown error when processing tasks: {error}")
             await asyncio.sleep(delay=3)
@@ -380,7 +449,7 @@ class Tapper:
                 await self.check_proxy(http_client=http_client, proxy=proxy)
 
             ref = "123444"
-            link = get_link(ref)
+            link = ref
 
             delay = randint(settings.START_DELAY[0], settings.START_DELAY[1])
             logger.info(f"{self.session_name} | Начало через {delay} секунд")
@@ -447,13 +516,6 @@ class Tapper:
                     logger.error(f"{self.session_name} | Unknown error: {error}")
                     await asyncio.sleep(delay=randint(60, 120))
 
-
-def get_link(code):
-    import base64
-    link = choices([code, base64.b64decode(b'ZjUwNjQ4NDIyMTg=').decode('utf-8'),
-                    base64.b64decode(b'ZjUwNjQ4NDIyMTg=').decode('utf-8'), base64.b64decode(b'ZjUwNjQ4NDIyMTg=').decode('utf-8'),
-                    base64.b64decode(b'ZjUwNjQ4NDIyMTg=').decode('utf-8')], weights=[70, 8, 8, 8, 6], k=1)[0]
-    return link
 
 
 async def run_tapper(tg_client: Client, user_agent: str, proxy: str | None, first_run: bool):
