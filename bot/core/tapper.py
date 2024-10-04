@@ -325,7 +325,7 @@ class Tapper:
                 color_hex = '#{:02x}{:02x}{:02x}'.format(*color_rgb)
                 try:
                     paint_request = await http_client.post('https://notpx.app/api/v1/repaint/start', 
-                                                           json={"pixelId": int(f"{x}{y}")+1, "newColor": {color_hex}})
+                                                           json={"pixelId": int(f"{x}{y}")+1, "newColor": color_hex})
                     if paint_request.status == 200:
                         # Якщо статус 200 OK, то отримайте відповідь
                         response_data = await paint_request.json()  # Або .text() для текстової відповіді
