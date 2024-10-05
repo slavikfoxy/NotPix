@@ -313,28 +313,27 @@ class Tapper:
     "#510411", "#b44e12", "#1a7550", "#1f5e5c", "#752fbb", "#8e2b8d", "#961554", "#4c351a",
     "#000000"
 )
-
-        for change in changes:
-            stats = await http_client.get('https://notpx.app/api/v1/mining/status')
-            stats.raise_for_status()  # Піднімемо виняток у випадку неуспішного статусу
-            stats_json = await stats.json()
-            charges = stats_json['charges']  # Отримуємо кількість доступних "зарядів" (малювань)
-            logger.info(f"{self.session_name} | stats_json['charges'] == : {charges}")
-            if charges > 0:
-                x, y, color_rgb = change
-                color_hex = '#{:02x}{:02x}{:02x}'.format(*color_rgb)
-                try:
-                    paint_request = await http_client.post('https://notpx.app/api/v1/repaint/start', 
-                                                           json={"pixelId": int(f"{x}{y}")+1, "newColor": color_hex})
-                    if paint_request.status == 200:
+        stats = await http_client.get('https://notpx.app/api/v1/mining/status')
+        stats.raise_for_status()  # Піднімемо виняток у випадку неуспішного статусу
+        stats_json = await stats.json()
+        charges = stats_json['charges']  # Отримуємо кількість доступних "зарядів" (малювань)
+        logger.info(f"{self.session_name} | stats_json['charges'] == : {charges}")
+        for _ in range(charges):  # Задайте кількість ітерацій
+            change = random.choice(changes)
+            x, y, color_rgb = change
+            color_hex = '#{:02x}{:02x}{:02x}'.format(*color_rgb)
+            try:
+                paint_request = await http_client.post('https://notpx.app/api/v1/repaint/start', 
+                                                        json={"pixelId": int(f"{x}{y}")+1, "newColor": color_hex})
+                if paint_request.status == 200:
                         # Якщо статус 200 OK, то отримайте відповідь
-                        response_data = await paint_request.json()  # Або .text() для текстової відповіді
-                        logger.info(f"{self.session_name} | response_data == : {response_data}")
-                    paint_request.raise_for_status()
-                    logger.success(f"{self.session_name} | Painted {x} {y} with color {color_hex}")
-                    await asyncio.sleep(delay=randint(5, 10))
-                except Exception as error:
-                    logger.error(f"{self.session_name} | Error painting pixel: {error}")
+                    response_data = await paint_request.json()  # Або .text() для текстової відповіді
+                    logger.info(f"{self.session_name} | response_data == : {response_data}")
+                paint_request.raise_for_status()
+                logger.success(f"{self.session_name} | Painted {x} {y} with color {color_hex}")
+                await asyncio.sleep(delay=randint(5, 10))
+            except Exception as error:
+                logger.error(f"{self.session_name} | Error painting pixel: {error}")
 
     async def paint(self, http_client: aiohttp.ClientSession):
         try:
