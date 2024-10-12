@@ -1,36 +1,59 @@
-from pydantic_settings import BaseSettings
-
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
-    # Получать тут https://my.telegram.org/auth
-    API_ID: int = 24582366
-    API_HASH: str = "c9e6e4a554feec735792862206916ef5"
 
-    # Настройки бота
-    # Время между циклами(Чтобы не забанило). Можно оставить без изменения
-    SLEEP_TIME: list[int] = [2700, 4200]
-    # Задержка перед началом
-    START_DELAY: list[int] = [1, 17]
-    # Выполнять ли таски автоматически
-    AUTO_TASK: bool = True
-    # не трогать
-    TASKS_TO_DO: list[str] = ["paint20pixels", "x:notpixel", "x:notcoin", "channel:notcoin", "channel:notpixel_channel"]
-    # Автоматически ставить пиксели
-    AUTO_DRAW: bool = True
-    # Разрешить Автоматическую подписку на каналы для выполнения заданий
-    JOIN_TG_CHANNELS: bool = True
-    # Автоматически Собирать намайненые награды
-    CLAIM_REWARD: bool = True
-    # Автоматически обновлять бусты
-    AUTO_UPGRADE: bool = True
-    # не трогать
-    IGNORED_BOOSTS: list[str] = ['paintReward']
-    IN_USE_SESSIONS_PATH: str = 'bot/config/used_sessions.txt'
-    NIGHT_MODE: bool = True
-    # Время когда бот должен спать(анти бан). Можно оставить без изменения(Время указано в формате UTC)
+    # тут можете менять под себя
+    API_ID: int = 24582366
+    API_HASH: str = 'c9e6e4a554feec735792862206916ef5'
+
+    PAINT_REWARD_MAX: int = 5
+    ENERGY_LIMIT_MAX: int = 7
+    RE_CHARGE_SPEED_MAX: int = 7
+
+    USE_PROXY_FROM_FILE: bool = False
+
+    ENABLE_AUTO_TASKS: bool = True
+    ENABLE_AUTO_DRAW: bool = True
+    ENABLE_JOIN_TG_CHANNELS: bool = True
+    ENABLE_CLAIM_REWARD: bool = True
+    ENABLE_AUTO_UPGRADE: bool = True
+
+# настройки ниже лучше не трогать
+
+    USE_RANDOM_DELAY_IN_RUN: bool = True
+    RANDOM_DELAY_IN_RUN: list[int] = [1, 17]
+
+    SLEEP_TIME_IN_MINUTES: list[int] = [30, 60]
+
+    ENABLE_AUTO_JOIN_TO_SQUAD_CHANNEL: bool = True
+    ENABLE_AUTO_JOIN_TO_SQUAD: bool = True
+    SQUAD_SLUG: str = 'lisyfox'
+    USE_REF: bool = True
+    REF_ID: str = '00'
+
+    DISABLE_IN_NIGHT: bool = True
     NIGHT_TIME: list[int] = [0, 5]
-    # не трогать
-    NIGHT_CHECKING: list[int] = [3600, 7200]
+
+    DRAW_RANDOM_X_DIAPOSON: list[int] = [837, 948]
+    DRAW_RANDOM_Y_DIAPOSON: list[int] = [242, 353]
+    DRAW_RANDOM_COLORS: list[str] = ["#000000"]
+
+    ENABLE_EXPERIMENTAL_X3_MODE: bool = False
+    ENABLE_DRAW_ART: bool = False
+    DRAW_ART_COORDS: list[dict] = [
+        {
+            'color': "#6A5CFF",
+            'x': { 'type': 'diaposon', 'value': [995, 999] },
+            'y': { 'type': 'random', 'value': [995, 999] }
+        }
+    ]
+
+    ENABLE_SSL: bool = True
+
+    BOOSTS_BLACK_LIST: list[str] = ['invite3frens', 'INVITE_FRIENDS', 'TON_TRANSACTION', 'BOOST_CHANNEL', 'ACTIVITY_CHALLENGE', 'CONNECT_WALLET']
+    TASKS_TODO_LIST: list[str] = ["x:notcoin", "x:notpixel", "paint20pixels", "leagueBonusSilver", "leagueBonusGold", "leagueBonusPlatinum", "channel:notpixel_channel", "channel:notcoin"]
 
 
 settings = Settings()
+
+
