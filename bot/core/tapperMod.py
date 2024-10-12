@@ -304,7 +304,7 @@ class Tapper:
         #logger.info(f"{self.session_name} | changes: {changes}")
         return changes
 
-    async def paint_changes(self, http_client):
+    async def paint_changes(self, http_client, changes):
         """Малює пікселі, які не збігаються."""
         colors = (
     "#e67b7a", "#f7cf44", "#b6f07c", "#4dd9c8", "#8ac2ff", "#d5affd", "#ffc3a1", "#ffffff", 
@@ -318,19 +318,7 @@ class Tapper:
         stats_json = await stats.json()
         charges = stats_json['charges']  # Отримуємо кількість доступних "зарядів" (малювань)
         logger.info(f"{self.session_name} | stats_json['charges'] == : {charges}")
-        base_image_url = 'https://image.notpx.app/api/v2/image'
-        overlay_image_url = 'https://app.notpx.app/assets/durovoriginal-CqJYkgok.png'
-        x_offset, y_offset = 244, 244
-
-        # Завантажуємо базове та накладене зображення
-        base_image = await self.get_image(http_client, base_image_url)
-         overlay_image = await self.get_image(http_client, overlay_image_url)
-
-        
         for _ in range(charges):  # Задайте кількість ітерацій
-            if base_image and overlay_image:
-            # Порівняння зображень і отримання змінених пікселів
-                changes = await self.compare_images(base_image, overlay_image, x_offset, y_offset)
             change = random.choice(changes)
             x, y, color_rgb = change
             color_hex = '#{:02x}{:02x}{:02x}'.format(*color_rgb)
@@ -357,8 +345,20 @@ class Tapper:
 
             # Якщо є "заряди", запускаємо малювання
             if charges > 0:
+                base_image_url = 'https://image.notpx.app/api/v2/image'
+                overlay_image_url = 'https://app.notpx.app/assets/worldtemplate2-B7WvoJMz.png'
+                x_offset, y_offset = 372, 372
+
+                # Завантажуємо базове та накладене зображення
+                base_image = await self.get_image(http_client, base_image_url)
+                overlay_image = await self.get_image(http_client, overlay_image_url)
+
+                if base_image and overlay_image:
+                    # Порівняння зображень і отримання змінених пікселів
+                    changes = await self.compare_images(base_image, overlay_image, x_offset, y_offset)
+
                     # Малюємо змінені пікселі
-                    await self.paint_changes(http_client)
+                    await self.paint_changes(http_client, changes)
                 else:
                     logger.error(f"{self.session_name} | Failed to load images.")
             else:
