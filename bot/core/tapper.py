@@ -324,7 +324,7 @@ class Tapper:
 
         # Завантажуємо базове та накладене зображення
         base_image = await self.get_image(http_client, base_image_url)
-         overlay_image = await self.get_image(http_client, overlay_image_url)
+        overlay_image = await self.get_image(http_client, overlay_image_url)
 
         
         for _ in range(charges):  # Задайте кількість ітерацій
