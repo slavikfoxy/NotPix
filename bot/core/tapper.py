@@ -331,21 +331,23 @@ class Tapper:
             if base_image and overlay_image:
             # Порівняння зображень і отримання змінених пікселів
                 changes = await self.compare_images(base_image, overlay_image, x_offset, y_offset)
-            change = random.choice(changes)
-            x, y, color_rgb = change
-            color_hex = '#{:02x}{:02x}{:02x}'.format(*color_rgb)
-            try:
-                paint_request = await http_client.post('https://notpx.app/api/v1/repaint/start', 
-                                                        json={"pixelId": int(f"{x}{y}")+1, "newColor": color_hex})
-                if paint_request.status == 200:
-                        # Якщо статус 200 OK, то отримайте відповідь
-                    response_data = await paint_request.json()  # Або .text() для текстової відповіді
-                    logger.info(f"{self.session_name} | response_data == : {response_data}")
-                paint_request.raise_for_status()
-                logger.success(f"{self.session_name} | Painted {x} {y} with color {color_hex}")
-                await asyncio.sleep(delay=randint(5, 10))
-            except Exception as error:
-                logger.error(f"{self.session_name} | Error painting pixel: {error}")
+                change = random.choice(changes)
+                x, y, color_rgb = change
+                color_hex = '#{:02x}{:02x}{:02x}'.format(*color_rgb)
+                try:
+                    paint_request = await http_client.post('https://notpx.app/api/v1/repaint/start', 
+                                                            json={"pixelId": int(f"{x}{y}")+1, "newColor": color_hex})
+                    if paint_request.status == 200:
+                            # Якщо статус 200 OK, то отримайте відповідь
+                        response_data = await paint_request.json()  # Або .text() для текстової відповіді
+                        logger.info(f"{self.session_name} | response_data == : {response_data}")
+                    paint_request.raise_for_status()
+                    logger.success(f"{self.session_name} | Painted {x} {y} with color {color_hex}")
+                    await asyncio.sleep(delay=randint(5, 10))
+                except Exception as error:
+                    logger.error(f"{self.session_name} | Error painting pixel: {error}")
+            else:
+                    logger.error(f"{self.session_name} | Failed to load images.")
 
     async def paint(self, http_client: aiohttp.ClientSession):
         try:
@@ -359,8 +361,6 @@ class Tapper:
             if charges > 0:
                     # Малюємо змінені пікселі
                     await self.paint_changes(http_client)
-                else:
-                    logger.error(f"{self.session_name} | Failed to load images.")
             else:
                 logger.info(f"{self.session_name} | No charges available for painting.")
         except Exception as error:
