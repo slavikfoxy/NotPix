@@ -340,10 +340,10 @@ class Tapper:
                     if paint_request.status == 200:
                             # Якщо статус 200 OK, то отримайте відповідь
                         response_data = await paint_request.json()  # Або .text() для текстової відповіді
-                        logger.info(f"{self.session_name} | response_data == : {response_data}")
+                        logger.info(f"{self.session_name} | Balance == : {response_data}")
                     paint_request.raise_for_status()
                     logger.success(f"{self.session_name} | Painted {x} {y} with color {color_hex}")
-                    await asyncio.sleep(delay=randint(5, 10))
+                    await asyncio.sleep(delay=randint(2, 7))
                 except Exception as error:
                     logger.error(f"{self.session_name} | Error painting pixel: {error}")
             else:
