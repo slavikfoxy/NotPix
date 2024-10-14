@@ -418,10 +418,10 @@ class Tapper:
                 await asyncio.sleep(delay=random.randint(4, 8))
                 # Завантажуємо поточне зображення без image_headers (якщо не потрібно)
                 current_image_url = 'https://image.notpx.app/api/v2/image'
-                current_image = await self.get_image(http_client, current_image_url, image_headers=image_headers)  # Аргумент image_headers не потрібен
+                current_image = await self.get_image(http_client, current_image_url)  # Аргумент image_headers не потрібен
                 if not current_image:
                     return None
-                    
+
                 break_socket = False
 
                 # Обробляємо повідомлення з оновленнями
