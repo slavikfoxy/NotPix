@@ -346,18 +346,18 @@ class Tapper:
             return None
 
     async def get_image(self, http_client, url, image_headers=None):
-    try:
-        # Якщо image_headers не передані, використовуємо порожній словник
-        async with http_client.get(url, headers=image_headers or {}) as response:
-            if response.status == 200:
-                img_data = await response.read()
-                img = Image.open(io.BytesIO(img_data))
-                return img
-            else:
-                raise Exception(f"Failed to download image from {url}, status: {response.status}")
-    except Exception as error:
-        self.error(f"Error during loading image from url: {url} | Error: {error}")
-        return None
+        try:
+            # Якщо image_headers не передані, використовуємо порожній словник
+            async with http_client.get(url, headers=image_headers or {}) as response:
+                if response.status == 200:
+                    img_data = await response.read()
+                    img = Image.open(io.BytesIO(img_data))
+                    return img
+                else:
+                    raise Exception(f"Failed to download image from {url}, status: {response.status}")
+        except Exception as error:
+            self.error(f"Error during loading image from url: {url} | Error: {error}")
+            return None
 
     async def send_draw_request(self, http_client: aiohttp.ClientSession, update):
         x, y, color = update
