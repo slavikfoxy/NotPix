@@ -380,93 +380,93 @@ class Tapper:
 
         self.success(f"Painted (X: <cyan>{x}</cyan>, Y: <cyan>{y}</cyan>) with color <light-blue>{color}</light-blue> 🎨️ | Balance <light-green>{'{:,.3f}'.format(data.get('balance', 'unknown'))}</light-green> 🔳")
 
-async def draw_x3(self, http_client: aiohttp.ClientSession):
-    try:
-        # Отримуємо статус майнінгу
-        response = await http_client.get('https://notpx.app/api/v1/mining/status', ssl=settings.ENABLE_SSL)
-        response.raise_for_status()
-        data = await response.json()
-        charges = data['charges']
+    async def draw_x3(self, http_client: aiohttp.ClientSession):
+        try:
+            # Отримуємо статус майнінгу
+            response = await http_client.get('https://notpx.app/api/v1/mining/status', ssl=settings.ENABLE_SSL)
+            response.raise_for_status()
+            data = await response.json()
+            charges = data['charges']
 
-        if charges > 0:
-            self.info(f"Energy: <cyan>{charges}</cyan> ⚡️")
-        else:
-            self.info(f"No energy ⚡️")
-            return None
-
-        # Завантажуємо оригінальне зображення
-        original_image_url = 'https://app.notpx.app/assets/durovoriginal-CqJYkgok.png'
-        x_offset, y_offset = 244, 244  # Координати початку шаблону
-
-        image_headers = deepcopy(headers)
-        image_headers['Host'] = 'app.notpx.app'
-        original_image = await self.get_image(http_client, original_image_url, image_headers=image_headers)
-        if not original_image:
-            return None
-
-
-        # Підписка на оновлення зображення
-        subscribe_message = json.dumps({
-            "action": "subscribe",
-            "channel": "imageUpdates"
-        })
-        await self.socket.send_str(subscribe_message)
-
-        while charges > 0:
-            await asyncio.sleep(delay=random.randint(4, 8))
-            # Завантажуємо поточне зображення
-            current_image_url = 'https://image.notpx.app/api/v2/image'
-            current_image = await self.get_image(http_client, current_image_url)
-            if not current_image:
+            if charges > 0:
+                self.info(f"Energy: <cyan>{charges}</cyan> ⚡️")
+            else:
+                self.info(f"No energy ⚡️")
                 return None
-            break_socket = False
 
-            # Обробляємо повідомлення з оновленнями
-            async for message in self.socket:
-                if break_socket:
-                    break
+            # Завантажуємо оригінальне зображення
+            original_image_url = 'https://app.notpx.app/assets/durovoriginal-CqJYkgok.png'
+            x_offset, y_offset = 244, 244  # Координати початку шаблону
 
-                if message.type == aiohttp.WSMsgType.TEXT:
-                    try:
-                        updates = message.data.split("\n")
+            image_headers = deepcopy(headers)
+            image_headers['Host'] = 'app.notpx.app'
+            original_image = await self.get_image(http_client, original_image_url, image_headers=image_headers)
+            if not original_image:
+                return None
 
-                        for update in updates:
-                            match = re.match(r'pixelUpdate:(\d+):#([0-9A-Fa-f]{6})', update)
 
-                            if match:
-                                pixel_index = match.group(1)
+            # Підписка на оновлення зображення
+            subscribe_message = json.dumps({
+                "action": "subscribe",
+                "channel": "imageUpdates"
+            })
+            await self.socket.send_str(subscribe_message)
 
-                                if len(pixel_index) < 6:
-                                    continue
+            while charges > 0:
+                await asyncio.sleep(delay=random.randint(4, 8))
+                # Завантажуємо поточне зображення
+                current_image_url = 'https://image.notpx.app/api/v2/image'
+                current_image = await self.get_image(http_client, current_image_url)
+                if not current_image:
+                    return None
+                break_socket = False
 
-                                updated_y = int(str(pixel_index)[:3])
-                                updated_x = int(str(pixel_index)[3:]) - 1
-                                updated_pixel_color = f"#{match.group(2)}"
+                # Обробляємо повідомлення з оновленнями
+                async for message in self.socket:
+                    if break_socket:
+                        break
 
-                                # Перевіряємо, чи знаходиться оновлення у визначеній області
-                                if 244 < updated_x < 755 and 244 < updated_y < 755:
-                                    original_pixel = original_image.getpixel((updated_x - x_offset, updated_y - y_offset))
-                                    original_pixel_color = '#{:02x}{:02x}{:02x}'.format(*original_pixel).upper()
+                    if message.type == aiohttp.WSMsgType.TEXT:
+                        try:
+                            updates = message.data.split("\n")
 
-                                    current_pixel = current_image.getpixel((updated_x, updated_y))
-                                    current_pixel_color = '#{:02x}{:02x}{:02x}'.format(*current_pixel).upper()
+                            for update in updates:
+                                match = re.match(r'pixelUpdate:(\d+):#([0-9A-Fa-f]{6})', update)
 
-                                    # Перевіряємо різницю між оригінальним пікселем і поточним
-                                    if current_pixel_color != original_pixel_color:
-                                        await self.send_draw_request(
-                                            http_client=http_client,
-                                            update=(updated_x, updated_y, original_pixel_color)
-                                        )
-                                        charges -= 1
-                                        break_socket = True
-                                        break
-                    except Exception as e:
-                        self.error(f"Websocket error during painting (x3): {e}")
-    except Exception as error:
-        self.warning(f"Unknown error during painting (x3): <light-yellow>{error}</light-yellow>")
-        self.info(f"Start drawing without x3...")
-        await asyncio.sleep(delay=3)
-        await self.draw(http_client=http_client)
+                                if match:
+                                    pixel_index = match.group(1)
+
+                                    if len(pixel_index) < 6:
+                                        continue
+
+                                    updated_y = int(str(pixel_index)[:3])
+                                    updated_x = int(str(pixel_index)[3:]) - 1
+                                    updated_pixel_color = f"#{match.group(2)}"
+
+                                    # Перевіряємо, чи знаходиться оновлення у визначеній області
+                                    if 244 < updated_x < 755 and 244 < updated_y < 755:
+                                        original_pixel = original_image.getpixel((updated_x - x_offset, updated_y - y_offset))
+                                        original_pixel_color = '#{:02x}{:02x}{:02x}'.format(*original_pixel).upper()
+
+                                        current_pixel = current_image.getpixel((updated_x, updated_y))
+                                        current_pixel_color = '#{:02x}{:02x}{:02x}'.format(*current_pixel).upper()
+
+                                        # Перевіряємо різницю між оригінальним пікселем і поточним
+                                        if current_pixel_color != original_pixel_color:
+                                            await self.send_draw_request(
+                                                http_client=http_client,
+                                                update=(updated_x, updated_y, original_pixel_color)
+                                            )
+                                            charges -= 1
+                                            break_socket = True
+                                            break
+                        except Exception as e:
+                            self.error(f"Websocket error during painting (x3): {e}")
+        except Exception as error:
+            self.warning(f"Unknown error during painting (x3): <light-yellow>{error}</light-yellow>")
+            self.info(f"Start drawing without x3...")
+            await asyncio.sleep(delay=3)
+            await self.draw(http_client=http_client)
 
     async def draw(self, http_client: aiohttp.ClientSession):
         try:
