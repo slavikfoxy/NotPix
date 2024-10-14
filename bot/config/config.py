@@ -38,7 +38,7 @@ class Settings(BaseSettings):
     DRAW_RANDOM_Y_DIAPOSON: list[int] = [242, 353]
     DRAW_RANDOM_COLORS: list[str] = ["#000000"]
 
-    ENABLE_EXPERIMENTAL_X3_MODE: bool = False
+    ENABLE_EXPERIMENTAL_X3_MODE: bool = True
     ENABLE_DRAW_ART: bool = False
     DRAW_ART_COORDS: list[dict] = [
         {
