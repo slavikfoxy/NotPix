@@ -39,7 +39,7 @@ class Settings(BaseSettings):
     DRAW_RANDOM_COLORS: list[str] = ["#000000"]
 
     ENABLE_EXPERIMENTAL_X3_MODE: bool = True
-    ENABLE_DRAW_ART: bool = False
+    ENABLE_DRAW_ART: bool = True
     DRAW_ART_COORDS: list[dict] = [
         {
             'color': "#6A5CFF",
