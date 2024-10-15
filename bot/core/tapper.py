@@ -473,6 +473,40 @@ class Tapper:
             await self.draw(http_client=http_client)
 
     async def draw(self, http_client: aiohttp.ClientSession):
+    try:
+        # Отримуємо статус майнінгу
+        response = await http_client.get('https://notpx.app/api/v1/mining/status', ssl=settings.ENABLE_SSL)
+        response.raise_for_status()
+        data = await response.json()
+        charges = data['charges']
+
+        if charges > 0:
+            self.info(f"Energy: <cyan>{charges}</cyan> ⚡️")
+        else:
+            self.info(f"No energy ⚡️")
+            return None
+
+        # Малюємо стільки разів, скільки є зарядів
+        for _ in range(charges):
+            # Випадковий вибір координат у діапазоні X: 512-539, Y: 244-257
+            x = random.randint(512, 539)
+            y = random.randint(244, 257)
+
+            # Фіксований колір
+            color = '#7EED56'
+
+            # Надсилаємо запит на малювання
+            await self.send_draw_request(http_client=http_client, update=(x, y, color))
+
+            # Затримка перед наступним малюванням
+            await asyncio.sleep(delay=random.randint(5, 10))
+
+    except Exception as error:
+        self.error(f"Unknown error during painting: <light-yellow>{error}</light-yellow>")
+        await asyncio.sleep(delay=3)
+
+"""
+    async def draw(self, http_client: aiohttp.ClientSession):
         try:
             response = await http_client.get('https://notpx.app/api/v1/mining/status', ssl=settings.ENABLE_SSL)
 
@@ -515,7 +549,7 @@ class Tapper:
         except Exception as error:
             self.error(f"Unknown error during painting: <light-yellow>{error}</light-yellow>")
             await asyncio.sleep(delay=3)
-
+"""
     async def upgrade(self, http_client: aiohttp.ClientSession):
         try:
             while True:
