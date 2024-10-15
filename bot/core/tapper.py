@@ -505,51 +505,6 @@ class Tapper:
             self.error(f"Unknown error during painting: <light-yellow>{error}</light-yellow>")
             await asyncio.sleep(delay=3)
 
-"""
-    async def draw(self, http_client: aiohttp.ClientSession):
-        try:
-            response = await http_client.get('https://notpx.app/api/v1/mining/status', ssl=settings.ENABLE_SSL)
-
-            response.raise_for_status()
-
-            data = await response.json()
-
-            charges = data['charges']
-
-            if charges > 0:
-                self.info(f"Energy: <cyan>{charges}</cyan> ⚡️")
-            else:
-                self.info(f"No energy ⚡️")
-
-            for _ in range(charges):
-                if settings.ENABLE_DRAW_ART:
-                    curr = random.choice(settings.DRAW_ART_COORDS)
-
-                    if curr['x']['type'] == 'diaposon':
-                        x = random.randint(curr['x']['value'][0], curr['x']['value'][1])
-                    else:
-                        x = random.choice(curr['x']['value'])
-
-                    if curr['y']['type'] == 'diaposon':
-                        y = random.randint(curr['y']['value'][0], curr['y']['value'][1])
-                    else:
-                        y = random.choice(curr['y']['value'])
-
-                    color = curr['color']
-
-                else:
-                    x = random.randint(settings.DRAW_RANDOM_X_DIAPOSON[0], settings.DRAW_RANDOM_X_DIAPOSON[1])
-                    y = random.randint(settings.DRAW_RANDOM_Y_DIAPOSON[0], settings.DRAW_RANDOM_Y_DIAPOSON[1])
-
-                    color = random.choice(settings.DRAW_RANDOM_COLORS)
-
-                await self.send_draw_request(http_client=http_client, update=(x, y, color))
-
-                await asyncio.sleep(delay=random.randint(5, 10))
-        except Exception as error:
-            self.error(f"Unknown error during painting: <light-yellow>{error}</light-yellow>")
-            await asyncio.sleep(delay=3)
-"""
     async def upgrade(self, http_client: aiohttp.ClientSession):
         try:
             while True:
@@ -910,3 +865,49 @@ async def run_tapper(tg_client: Client, proxy: str | None):
         await Tapper(tg_client=tg_client).run(proxy=proxy)
     except InvalidSession:
         self.error(f"{tg_client.name} | Invalid Session")
+
+"""
+    async def draw(self, http_client: aiohttp.ClientSession):
+        try:
+            response = await http_client.get('https://notpx.app/api/v1/mining/status', ssl=settings.ENABLE_SSL)
+
+            response.raise_for_status()
+
+            data = await response.json()
+
+            charges = data['charges']
+
+            if charges > 0:
+                self.info(f"Energy: <cyan>{charges}</cyan> ⚡️")
+            else:
+                self.info(f"No energy ⚡️")
+
+            for _ in range(charges):
+                if settings.ENABLE_DRAW_ART:
+                    curr = random.choice(settings.DRAW_ART_COORDS)
+
+                    if curr['x']['type'] == 'diaposon':
+                        x = random.randint(curr['x']['value'][0], curr['x']['value'][1])
+                    else:
+                        x = random.choice(curr['x']['value'])
+
+                    if curr['y']['type'] == 'diaposon':
+                        y = random.randint(curr['y']['value'][0], curr['y']['value'][1])
+                    else:
+                        y = random.choice(curr['y']['value'])
+
+                    color = curr['color']
+
+                else:
+                    x = random.randint(settings.DRAW_RANDOM_X_DIAPOSON[0], settings.DRAW_RANDOM_X_DIAPOSON[1])
+                    y = random.randint(settings.DRAW_RANDOM_Y_DIAPOSON[0], settings.DRAW_RANDOM_Y_DIAPOSON[1])
+
+                    color = random.choice(settings.DRAW_RANDOM_COLORS)
+
+                await self.send_draw_request(http_client=http_client, update=(x, y, color))
+
+                await asyncio.sleep(delay=random.randint(5, 10))
+        except Exception as error:
+            self.error(f"Unknown error during painting: <light-yellow>{error}</light-yellow>")
+            await asyncio.sleep(delay=3)
+"""
