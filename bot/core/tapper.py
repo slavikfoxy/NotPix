@@ -393,7 +393,7 @@ class Tapper:
                 self.info(f"Energy: <cyan>{charges}</cyan> ⚡️")
             else:
                 self.info(f"No energy ⚡️")
-                eturn None
+                return None
 
       # Завантажуємо оригінальне зображення
             original_image_url = 'https://app.notpx.app/assets/durovoriginal-CqJYkgok.png'
