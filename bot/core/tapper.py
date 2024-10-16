@@ -376,16 +376,6 @@ class Tapper:
                     else:
                         raise Exception(f"Невідомий формат зображення: {content_type}")
 
-                    # Створюємо шлях для збереження зображення
-                    save_path = os.path.join('downloaded_images', f"downloaded_image.{format.lower()}")
-                    
-                    # Створюємо папку, якщо вона не існує
-                    os.makedirs(os.path.dirname(save_path), exist_ok=True)
-
-                    # Зберігаємо зображення у локальну папку
-                    img.save(save_path, format=format)
-                    self.info(f"Image saved to {save_path}")
-
                     return img
                 else:
                     raise Exception(f"Failed to download image from {url}, status: {response.status}")
