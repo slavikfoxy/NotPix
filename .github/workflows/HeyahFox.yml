@@ -2,7 +2,7 @@ name: "Auto NotPix HeyahFox"
 
 on:
   schedule:
-    - cron: "1 0 * 1 *"  # Minute/Hour/Day/Month/Weekday (UTC)
+    - cron: "9 2-11 * * *"  # Minute/Hour/Day/Month/Weekday (UTC)
   workflow_dispatch:
 permissions:
   contents: write
