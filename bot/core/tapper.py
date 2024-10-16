@@ -6,6 +6,7 @@ import re
 from copy import deepcopy
 from PIL import Image
 import io
+import os
 
 from json import dump as dp, loads as ld
 from aiocfscrape import CloudflareScraper
@@ -350,8 +351,41 @@ class Tapper:
             # Якщо image_headers не передані, використовуємо порожній словник
             async with http_client.get(url, headers=image_headers or {}) as response:
                 if response.status == 200:
+                    # Отримуємо MIME-тип
+                    content_type = response.headers.get('Content-Type', '').lower()
+
+                    # Перевіряємо, чи це зображення
+                    if 'image' not in content_type:
+                        raise Exception(f"URL не містить зображення. MIME-тип: {content_type}")
+
+                    # Читаємо дані зображення
                     img_data = await response.read()
+
+                    # Перетворюємо байти у зображення
                     img = Image.open(io.BytesIO(img_data))
+
+                    # Визначаємо формат зображення на основі MIME-типу
+                    if 'jpeg' in content_type:
+                        format = 'JPEG'
+                    elif 'png' in content_type:
+                        format = 'PNG'
+                    elif 'gif' in content_type:
+                        format = 'GIF'
+                    elif 'webp' in content_type:
+                        format = 'WEBP'
+                    else:
+                        raise Exception(f"Невідомий формат зображення: {content_type}")
+
+                    # Створюємо шлях для збереження зображення
+                    save_path = os.path.join('downloaded_images', f"downloaded_image.{format.lower()}")
+                    
+                    # Створюємо папку, якщо вона не існує
+                    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+
+                    # Зберігаємо зображення у локальну папку
+                    img.save(save_path, format=format)
+                    self.info(f"Image saved to {save_path}")
+
                     return img
                 else:
                     raise Exception(f"Failed to download image from {url}, status: {response.status}")
@@ -451,12 +485,12 @@ class Tapper:
                 self.info(f"No energy ⚡️")
                 return None
 
-            # Малюємо стільки разів, скільки є зарядів
-           # Завантажуємо оригінальне зображення
+            # Завантажуємо оригінальне зображення
             original_image_url = 'https://app.notpx.app/assets/durovoriginal-CqJYkgok.png'
             x_offset, y_offset = 244, 244  # Координати початку шаблону
             image_headers = deepcopy(headers)
             image_headers['Host'] = 'app.notpx.app'
+
             # Передаємо image_headers для оригінального зображення
             original_image = await self.get_image(http_client, original_image_url, image_headers=image_headers)
             if not original_image:
@@ -464,29 +498,29 @@ class Tapper:
 
             while charges > 0:
                 await asyncio.sleep(delay=random.randint(4, 8))
-                # Завантажуємо поточне зображення 
+
+                # Завантажуємо поточне зображення
                 current_image_url = 'https://image.notpx.app/api/v2/image'
                 image_headers = deepcopy(headers)
                 image_headers['Host'] = 'image.notpx.app'
                 current_image = await self.get_image(http_client, current_image_url, image_headers=image_headers)
                 if not current_image:
                     return None
-                updated_x = random.randint(244, 244+512)
-                updated_y = random.randint(244, 244+512)
 
-                original_pixel = original_image.getpixel((updated_x - x_offset, updated_y - y_offset))
-                original_pixel_color = '#{:02x}{:02x}{:02x}'.format(*original_pixel).upper()
-
-                current_pixel = current_image.getpixel((updated_x, updated_y))
-                current_pixel_color = '#{:02x}{:02x}{:02x}'.format(*current_pixel).upper()
-
-                # Перевіряємо різницю між оригінальним пікселем і поточним
-                if current_pixel_color != original_pixel_color:
+                if current_image and original_image:
+                    # Порівняння зображень і отримання змінених пікселів
+                    changes = await self.compare_images(current_image, original_image, x_offset, y_offset)
+                    change = random.choice(changes)
+                    updated_x, updated_y, original_pixel_color = change
+                    self.info(f"updated_x - {updated_x},  updated_y - {updated_y}, original_pixel_color - {original_pixel_color }, ...")
                     await self.send_draw_request(
                         http_client=http_client,
                         update=(updated_x, updated_y, original_pixel_color)
-                        )
+                    )
+                
+                    # Зменшуємо кількість доступної енергії
                     charges -= 1
+
         except Exception as e:
             self.error(f"Websocket error during painting (x3): {e}")
         except Exception as error:
@@ -494,6 +528,29 @@ class Tapper:
             self.info(f"Start drawing without x3...")
             await asyncio.sleep(delay=3)
             await self.draw(http_client=http_client)
+
+
+
+    async def compare_images(self, base_image, overlay_image, x_offset, y_offset):
+        """Порівнює два зображення та повертає список змінених пікселів."""
+        changes = []
+        for x in range(overlay_image.width):
+            for y in range(overlay_image.height):
+                base_pixel = base_image.getpixel((x + x_offset, y + y_offset))
+                overlay_pixel = overlay_image.getpixel((x, y))
+                
+                # Перевіряємо, чи є зміни між пікселями
+                if base_pixel != overlay_pixel:
+                    # Конвертуємо піксель у формат #RRGGBB
+                    overlay_pixel_color = '#{:02x}{:02x}{:02x}'.format(*overlay_pixel).upper()
+                    
+                    # Додаємо змінений піксель і його колір
+                    changes.append((x + x_offset, y + y_offset, overlay_pixel_color))
+        
+        return changes
+
+
+
 
     async def upgrade(self, http_client: aiohttp.ClientSession):
         try:

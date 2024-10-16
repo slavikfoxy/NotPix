@@ -21,7 +21,7 @@ class Settings(BaseSettings):
 # настройки ниже лучше не трогать
 
     USE_RANDOM_DELAY_IN_RUN: bool = True
-    RANDOM_DELAY_IN_RUN: list[int] = [1, 17]
+    RANDOM_DELAY_IN_RUN: list[int] = [1, 5]
 
     SLEEP_TIME_IN_MINUTES: list[int] = [30, 60]
 
