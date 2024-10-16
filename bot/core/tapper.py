@@ -393,7 +393,7 @@ class Tapper:
                 self.info(f"Energy: <cyan>{charges}</cyan> ⚡️")
             else:
                 self.info(f"No energy ⚡️")
-                return None
+                eturn None
 
       # Завантажуємо оригінальне зображення
             original_image_url = 'https://app.notpx.app/assets/durovoriginal-CqJYkgok.png'
@@ -449,24 +449,44 @@ class Tapper:
                 return None
 
             # Малюємо стільки разів, скільки є зарядів
-            for _ in range(charges):
-                # Випадковий вибір координат у діапазоні X: 512-539, Y: 244-257
-                x = random.randint(512, 539)
-                y = random.randint(244, 257)
+           # Завантажуємо оригінальне зображення
+            original_image_url = 'https://app.notpx.app/assets/durovoriginal-CqJYkgok.png'
+            x_offset, y_offset = 244, 244  # Координати початку шаблону
+            image_headers = deepcopy(headers)
+            image_headers['Host'] = 'app.notpx.app'
+            # Передаємо image_headers для оригінального зображення
+            original_image = await self.get_image(http_client, original_image_url, image_headers=image_headers)
+            if not original_image:
+                return None
 
-                # Фіксований колір
-                color = '#7EED56'
+            while charges > 0:
+                await asyncio.sleep(delay=random.randint(4, 8))
+                # Завантажуємо поточне зображення без image_headers (якщо не потрібно)
+                current_image_url = 'https://image.notpx.app/api/v2/image'
+                current_image = await self.get_image(http_client, current_image_url)  # Аргумент image_headers не потрібен
+                if not current_image:
+                    return None
 
-                # Надсилаємо запит на малювання
-                await self.send_draw_request(http_client=http_client, update=(x, y, color))
+                original_pixel = original_image.getpixel((updated_x - x_offset, updated_y - y_offset))
+                original_pixel_color = '#{:02x}{:02x}{:02x}'.format(*original_pixel).upper()
 
-                # Затримка перед наступним малюванням
-                await asyncio.sleep(delay=random.randint(5, 10))
+                current_pixel = current_image.getpixel((updated_x, updated_y))
+                current_pixel_color = '#{:02x}{:02x}{:02x}'.format(*current_pixel).upper()
 
+                # Перевіряємо різницю між оригінальним пікселем і поточним
+                if current_pixel_color != original_pixel_color:
+                    await self.send_draw_request(
+                        http_client=http_client,
+                        update=(updated_x, updated_y, original_pixel_color)
+                        )
+                charges -= 1
+        except Exception as e:
+            self.error(f"Websocket error during painting (x3): {e}")
         except Exception as error:
-            self.error(f"Unknown error during painting: <light-yellow>{error}</light-yellow>")
+            self.warning(f"Unknown error during painting (x3): <light-yellow>{error}</light-yellow>")
+            self.info(f"Start drawing without x3...")
             await asyncio.sleep(delay=3)
-
+            await self.draw(http_client=http_client)
     async def upgrade(self, http_client: aiohttp.ClientSession):
         try:
             while True:
