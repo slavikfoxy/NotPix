@@ -472,6 +472,8 @@ class Tapper:
                 current_image = await self.get_image(http_client, current_image_url, image_headers=image_headers)
                 if not current_image:
                     return None
+                updated_x = random.randint(244, 244+512)
+                updated_y = random.randint(244, 244+512)
 
                 original_pixel = original_image.getpixel((updated_x - x_offset, updated_y - y_offset))
                 original_pixel_color = '#{:02x}{:02x}{:02x}'.format(*original_pixel).upper()
@@ -493,6 +495,7 @@ class Tapper:
             self.info(f"Start drawing without x3...")
             await asyncio.sleep(delay=3)
             await self.draw(http_client=http_client)
+
     async def upgrade(self, http_client: aiohttp.ClientSession):
         try:
             while True:
