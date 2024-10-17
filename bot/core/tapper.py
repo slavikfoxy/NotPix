@@ -502,7 +502,6 @@ class Tapper:
                     changes = await self.compare_images(current_image, original_image, x_offset, y_offset)
                     change = random.choice(changes)
                     updated_x, updated_y, original_pixel_color = change
-                    self.info(f"updated_x - {updated_x},  updated_y - {updated_y}, original_pixel_color - {original_pixel_color }, ...")
                     await self.send_draw_request(
                         http_client=http_client,
                         update=(updated_x, updated_y, original_pixel_color)
