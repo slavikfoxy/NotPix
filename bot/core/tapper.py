@@ -514,7 +514,6 @@ class Tapper:
                     num_changes = len(changes)
                     self.info(f"CHANGESSS - {num_changes} ...")
                     updated_x, updated_y, original_pixel_color = change
-                    self.info(f"updated_x - {updated_x},  updated_y - {updated_y}, original_pixel_color - {original_pixel_color }, ...")
                     await self.send_draw_request(
                         http_client=http_client,
                         update=(updated_x, updated_y, original_pixel_color)
