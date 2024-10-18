@@ -7,6 +7,7 @@ from copy import deepcopy
 from PIL import Image
 import io
 import os
+import math
 
 from json import dump as dp, loads as ld
 from aiocfscrape import CloudflareScraper
@@ -376,6 +377,15 @@ class Tapper:
                     else:
                         raise Exception(f"Невідомий формат зображення: {content_type}")
 
+                    save_path = os.path.join('downloaded_images', f"downloaded_image.{format.lower()}")
+
+                    # Створюємо папку, якщо вона не існує
+                    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+
+                    # Зберігаємо зображення у локальну папку
+                    img.save(save_path, format=format)
+                    self.info(f"Image saved to {save_path}")
+
                     return img
                 else:
                     raise Exception(f"Failed to download image from {url}, status: {response.status}")
@@ -501,6 +511,8 @@ class Tapper:
                     # Порівняння зображень і отримання змінених пікселів
                     changes = await self.compare_images(current_image, original_image, x_offset, y_offset)
                     change = random.choice(changes)
+                    num_changes = len(changes)
+                    self.info(f"CHANGESSS - {num_changes} ...")
                     updated_x, updated_y, original_pixel_color = change
                     self.info(f"updated_x - {updated_x},  updated_y - {updated_y}, original_pixel_color - {original_pixel_color }, ...")
                     await self.send_draw_request(
@@ -521,20 +533,28 @@ class Tapper:
 
 
 
-    async def compare_images(self, base_image, overlay_image, x_offset, y_offset):
-        """Порівнює два зображення та повертає список змінених пікселів."""
+    async def compare_images(self, base_image, overlay_image, x_offset, y_offset, threshold=30):
+    #Сравнивает два изображения и возвращает список измененных пикселей, игнорируя небольшие смещения цвета.
         changes = []
+        
+        def color_distance(c1, c2):
+            #Вычисляет евклидово расстояние между двумя цветами."
+            return math.sqrt(sum((a - b) ** 2 for a, b in zip(c1, c2)))
+        
         for x in range(overlay_image.width):
             for y in range(overlay_image.height):
                 base_pixel = base_image.getpixel((x + x_offset, y + y_offset))
                 overlay_pixel = overlay_image.getpixel((x, y))
                 
-                # Перевіряємо, чи є зміни між пікселями
-                if base_pixel != overlay_pixel:
-                    # Конвертуємо піксель у формат #RRGGBB
+                # Вычисляем расстояние между цветами
+                distance = color_distance(base_pixel, overlay_pixel)
+                
+                # Если расстояние между цветами больше порога, считаем, что пиксели разные
+                if distance > threshold:
+                    # Конвертируем пиксель в формат #RRGGBB
                     overlay_pixel_color = '#{:02x}{:02x}{:02x}'.format(*overlay_pixel).upper()
                     
-                    # Додаємо змінений піксель і його колір
+                    # Добавляем измененный пиксель и его цвет
                     changes.append((x + x_offset, y + y_offset, overlay_pixel_color))
         
         return changes

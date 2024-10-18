@@ -25,8 +25,8 @@ class Settings(BaseSettings):
 
     SLEEP_TIME_IN_MINUTES: list[int] = [30, 60]
 
-    ENABLE_AUTO_JOIN_TO_SQUAD_CHANNEL: bool = False
-    ENABLE_AUTO_JOIN_TO_SQUAD: bool = False
+    ENABLE_AUTO_JOIN_TO_SQUAD_CHANNEL: bool = True
+    ENABLE_AUTO_JOIN_TO_SQUAD: bool = True
     SQUAD_SLUG: str = 'lisyfox'
     USE_REF: bool = True
     REF_ID: str = '00'
