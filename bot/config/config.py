@@ -6,9 +6,9 @@ class Settings(BaseSettings):
     API_ID: int = 24582366
     API_HASH: str = 'c9e6e4a554feec735792862206916ef5'
 
-    PAINT_REWARD_MAX: int = 5
+    PAINT_REWARD_MAX: int = 7
     ENERGY_LIMIT_MAX: int = 7
-    RE_CHARGE_SPEED_MAX: int = 7
+    RE_CHARGE_SPEED_MAX: int = 11
 
     USE_PROXY_FROM_FILE: bool = False
 
