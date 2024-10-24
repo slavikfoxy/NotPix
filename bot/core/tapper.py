@@ -484,8 +484,8 @@ class Tapper:
                 return None
 
             # Завантажуємо оригінальне зображення
-            original_image_url = 'https://app.notpx.app/assets/durovoriginal-CqJYkgok.png'
-            x_offset, y_offset = 244, 244  # Координати початку шаблону
+            original_image_url = 'https://app.notpx.app/assets/dungeon_4-B7Qp6JGr.png'
+            x_offset, y_offset = 372, 372  # Координати початку шаблону
             image_headers = deepcopy(headers)
             image_headers['Host'] = 'app.notpx.app'
 
