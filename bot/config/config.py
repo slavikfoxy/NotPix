@@ -6,9 +6,9 @@ class Settings(BaseSettings):
     API_ID: int = 24582366
     API_HASH: str = 'c9e6e4a554feec735792862206916ef5'
 
-    PAINT_REWARD_MAX: int = 5
+    PAINT_REWARD_MAX: int = 7
     ENERGY_LIMIT_MAX: int = 7
-    RE_CHARGE_SPEED_MAX: int = 7
+    RE_CHARGE_SPEED_MAX: int = 11
 
     USE_PROXY_FROM_FILE: bool = False
 
@@ -17,6 +17,13 @@ class Settings(BaseSettings):
     ENABLE_JOIN_TG_CHANNELS: bool = True
     ENABLE_CLAIM_REWARD: bool = True
     ENABLE_AUTO_UPGRADE: bool = True
+
+    IMAGE_LINK: str = 'https://app.notpx.app/assets/dungeon_4-B7Qp6JGr.png'
+    X_OFFSET: int = 372
+    Y_OFFSET: int = 372
+    DOWNLOAD_METHOD_2: bool = False
+    DOWNLOAD_FROM_FILE: bool = False
+    LOCAL_LINK_TO_FILE: str = 'file.png'
 
 # настройки ниже лучше не трогать
 
@@ -28,18 +35,20 @@ class Settings(BaseSettings):
     ENABLE_AUTO_JOIN_TO_SQUAD_CHANNEL: bool = True
     ENABLE_AUTO_JOIN_TO_SQUAD: bool = True
     SQUAD_SLUG: str = 'lisyfox'
-    USE_REF: bool = True
+    USE_REF: bool = False
     REF_ID: str = '00'
 
+    IN_USE_SESSIONS_PATH: str = 'bot/config/used_sessions.txt'
+
     DISABLE_IN_NIGHT: bool = True
-    NIGHT_TIME: list[int] = [0, 5]
+    NIGHT_TIME: list[int] = [23, 5]
 
     DRAW_RANDOM_X_DIAPOSON: list[int] = [837, 948]
     DRAW_RANDOM_Y_DIAPOSON: list[int] = [242, 353]
     DRAW_RANDOM_COLORS: list[str] = ["#000000"]
 
-    ENABLE_EXPERIMENTAL_X3_MODE: bool = True
-    ENABLE_DRAW_ART: bool = True
+    ENABLE_EXPERIMENTAL_X3_MODE: bool = False
+    ENABLE_DRAW_ART: bool = False
     DRAW_ART_COORDS: list[dict] = [
         {
             'color': "#6A5CFF",
@@ -51,7 +60,7 @@ class Settings(BaseSettings):
     ENABLE_SSL: bool = True
 
     BOOSTS_BLACK_LIST: list[str] = ['invite3frens', 'INVITE_FRIENDS', 'TON_TRANSACTION', 'BOOST_CHANNEL', 'ACTIVITY_CHALLENGE', 'CONNECT_WALLET']
-    TASKS_TODO_LIST: list[str] = ["x:notcoin", "x:notpixel", "paint20pixels", "leagueBonusSilver", "leagueBonusGold", "leagueBonusPlatinum", "channel:notpixel_channel", "channel:notcoin"]
+    TASKS_TODO_LIST: list[str] = ["x:notcoin", "x:notpixel", "paint20pixels", "leagueBonusSilver", "leagueBonusGold", "leagueBonusPlatinum", "boinkTask", "makePixelAvatar", "jettonTask", "channel:notpixel_channel", "channel:notcoin", "joinSquad"]
 
 
 settings = Settings()

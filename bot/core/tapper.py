@@ -2,6 +2,7 @@ from datetime import datetime, timedelta, timezone
 from dateutil import parser
 from time import time
 from urllib.parse import unquote, quote
+import urllib.request  
 import re
 from copy import deepcopy
 from PIL import Image
@@ -350,7 +351,7 @@ class Tapper:
     async def get_image(self, http_client, url, image_headers=None):
         try:
             # Якщо image_headers не передані, використовуємо порожній словник
-            async with http_client.get(url, headers=image_headers or {}) as response:
+            async with http_client.get(url, headers=image_headers) as response:
                 if response.status == 200:
                     # Отримуємо MIME-тип
                     content_type = response.headers.get('Content-Type', '').lower()
@@ -427,7 +428,6 @@ class Tapper:
                 self.info(f"No energy ⚡️")
                 return None
 
-      # Завантажуємо оригінальне зображення
             original_image_url = 'https://app.notpx.app/assets/durovoriginal-CqJYkgok.png'
             x_offset, y_offset = 244, 244  # Координати початку шаблону
             image_headers = deepcopy(headers)
@@ -483,21 +483,42 @@ class Tapper:
                 self.info(f"No energy ⚡️")
                 return None
 
-            # Завантажуємо оригінальне зображення
-            original_image_url = 'https://app.notpx.app/assets/durovoriginal-CqJYkgok.png'
-            x_offset, y_offset = 244, 244  # Координати початку шаблону
-            image_headers = deepcopy(headers)
-            image_headers['Host'] = 'app.notpx.app'
+            # Download Image
+            if settings.DOWNLOAD_METHOD_2 and not settings.DOWNLOAD_FROM_FILE:
+                self.info(f"Способ загрузки шаблона - urllib.request")
+                with urllib.request.urlopen(settings.IMAGE_LINK) as response:
+                    img_data = response.read()
+                    img = Image.open(io.BytesIO(img_data))
+                original_image = img
+                if not original_image:
+                    return None
 
-            # Передаємо image_headers для оригінального зображення
-            original_image = await self.get_image(http_client, original_image_url, image_headers=image_headers)
-            if not original_image:
-                return None
+            elif settings.DOWNLOAD_FROM_FILE:
+                self.info(f"Способ загрузки шаблона - локальный файл - os.path.join")
+                save_path = os.path.join(settings.LOCAL_LINK_TO_FILE)
+                with open(save_path, 'rb') as f:
+                    img_data = f.read()
+                    img = Image.open(io.BytesIO(img_data))
+                original_image = img
+                if not original_image:
+                    return None
+                
+            else:
+                self.info(f"Способ загрузки шаблона - стандартный - get_image")
+                original_image_url = settings.IMAGE_LINK
+                pattern = r'://([^/]+)/'
+                match = re.search(pattern, original_image_url)
+                x_offset, y_offset = settings.X_OFFSET, settings.Y_OFFSET  # Координат шаблону
+                image_headers = deepcopy(headers)
+                image_headers['Host'] = match.group(1)
+                original_image = await self.get_image(http_client, original_image_url, image_headers=image_headers)
+                if not original_image:
+                    return None
 
             while charges > 0:
                 await asyncio.sleep(delay=random.randint(4, 8))
 
-                # Завантажуємо поточне зображення
+                # Основной шаблон 1000 х 1000
                 current_image_url = 'https://image.notpx.app/api/v2/image'
                 image_headers = deepcopy(headers)
                 image_headers['Host'] = 'image.notpx.app'
@@ -510,7 +531,7 @@ class Tapper:
                     changes = await self.compare_images(current_image, original_image, x_offset, y_offset)
                     change = random.choice(changes)
                     num_changes = len(changes)
-                    self.info(f"CHANGESSS - {num_changes} ...")
+                    self.info(f"Количество пикселей на шаблоне для перекраски - {num_changes} ...")
                     updated_x, updated_y, original_pixel_color = change
                     await self.send_draw_request(
                         http_client=http_client,
@@ -521,13 +542,13 @@ class Tapper:
                     charges -= 1
 
         except Exception as e:
-            self.error(f"Websocket error during painting (x3): {e}")
+            self.error(f"Websocket error during painting (x8): {e}")
         except Exception as error:
-            self.warning(f"Unknown error during painting (x3): <light-yellow>{error}</light-yellow>")
-            self.info(f"Start drawing without x3...")
+            self.warning(f"Unknown error during painting (x8): <light-yellow>{error}</light-yellow>")
+            self.info(f"Start drawing without x8...")
             await asyncio.sleep(delay=3)
             await self.draw(http_client=http_client)
-
+            
 
 
     async def compare_images(self, base_image, overlay_image, x_offset, y_offset, threshold=30):
