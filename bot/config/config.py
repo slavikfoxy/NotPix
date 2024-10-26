@@ -18,25 +18,26 @@ class Settings(BaseSettings):
     ENABLE_CLAIM_REWARD: bool = True
     ENABLE_AUTO_UPGRADE: bool = True
 
-    IMAGE_LINK: str = 'https://app.notpx.app/assets/dungeon_4-B7Qp6JGr.png'
-    X_OFFSET: int = 372
-    Y_OFFSET: int = 372
-    DOWNLOAD_METHOD_2: bool = False
+    #IMAGE_LINK: str = 'https://app.notpx.app/assets/dungeon_4-B7Qp6JGr.png'
+    IMAGE_LINK: str = 'https://static.notpx.app/templates/153665413.png'
+    X_OFFSET: int = 244 #372
+    Y_OFFSET: int = 166
+    DOWNLOAD_METHOD_2: bool = True
     DOWNLOAD_FROM_FILE: bool = False
     LOCAL_LINK_TO_FILE: str = 'file.png'
 
 # настройки ниже лучше не трогать
 
     USE_RANDOM_DELAY_IN_RUN: bool = True
-    RANDOM_DELAY_IN_RUN: list[int] = [1, 5]
+    RANDOM_DELAY_IN_RUN: list[int] = [1, 4]
 
     SLEEP_TIME_IN_MINUTES: list[int] = [30, 60]
 
     ENABLE_AUTO_JOIN_TO_SQUAD_CHANNEL: bool = True
     ENABLE_AUTO_JOIN_TO_SQUAD: bool = True
     SQUAD_SLUG: str = 'lisyfox'
-    USE_REF: bool = False
-    REF_ID: str = '00'
+    USE_REF: bool = True
+    REF_ID: str = 'f153665413_t'
 
     IN_USE_SESSIONS_PATH: str = 'bot/config/used_sessions.txt'
 
