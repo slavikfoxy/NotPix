@@ -38,9 +38,8 @@ jobs:
             git config --global user.name "slavikfoxy"
             git remote set-url origin https://$GH_TOKEN@github.com/${{ github.repository }}
             git status
-            git pull origin main
             git add Balances.txt
             git add user_agents.json
-            git commit -am "Add new files and modify existing files"
+            git commit -am "Add new files and modify existing files" --allow-empty
             git push 
           
