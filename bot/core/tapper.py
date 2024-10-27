@@ -526,7 +526,7 @@ class Tapper:
                 return None
 
             x_offset, y_offset = settings.X_OFFSET, settings.Y_OFFSET  # Координат шаблону
-            
+            self.info(f"link - {settings.IMAGE_LINK}, REF_ID({settings.USE_REF}) - {settings.REF_ID}, x:{settings.X_OFFSET} y:{settings.Y_OFFSET}")
             # Download Image
             if settings.DOWNLOAD_METHOD_2 and not settings.DOWNLOAD_FROM_FILE:
                 self.info(f"Способ загрузки шаблона - urllib.request")
