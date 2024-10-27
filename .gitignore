@@ -8,3 +8,4 @@ __pycache__
 
 
 *.cpython-310.pyc
+/sessions
