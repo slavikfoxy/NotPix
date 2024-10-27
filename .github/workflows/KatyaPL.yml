@@ -30,4 +30,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           python3 ./main.py -a 1
+
+      - name: Commit and Push Changes
+        run: |
+            git config --global user.email "oliynik.v2014@gmail.com"
+            git config --global user.name "slavikfoxy"
+            git remote set-url origin https://$GH_TOKEN@github.com/${{ github.repository }}
+            git status
+            git add Balances.txt
+            git commit -am "Add new files and modify existing files"
+            git push 
           
