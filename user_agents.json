@@ -2,5 +2,9 @@
     {
         "session_name": "Orange",
         "user_agent": "Mozilla/5.0 (Linux; Android 7.1; Pixel 4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.5993.80 Mobile Safari/537.36"
+    },
+    {
+        "session_name": "Toxxa",
+        "user_agent": "Mozilla/5.0 (Linux; Android 15.0; NE2210) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.6167.165 Mobile Safari/537.36"
     }
 ]
