@@ -9,6 +9,7 @@ from PIL import Image
 import io
 import os
 import math
+import sys
 
 from json import dump as dp, loads as ld
 from aiocfscrape import CloudflareScraper
@@ -958,6 +959,8 @@ class Tapper:
                 all_balance = await self.get_total_balance()
                 self.info(f"Баланс всех аккаунтов: <red>{'{:,.3f}'.format(all_balance)}</red>")
 
+                sys.exit(1)
+                
                 sleep_time = random.randint(settings.SLEEP_TIME_IN_MINUTES[0], settings.SLEEP_TIME_IN_MINUTES[1])
 
                 is_night = False
@@ -984,6 +987,7 @@ class Tapper:
 
             except Exception as error:
                 self.error(f"Unknown error: <light-yellow>{error}</light-yellow>")
+        
 
 async def run_tapper(tg_client: Client, proxy: str | None):
     try:
