@@ -60,7 +60,7 @@ class Tapper:
         self.socket = None
         self.socket_task = None
         self.last_balance = 0
-        self.filename = 'Balaces.txt'
+        self.filename = 'Balances.txt'
 
         self.session_ug_dict = self.load_user_agents() or []
 
