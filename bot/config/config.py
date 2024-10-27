@@ -25,7 +25,7 @@ class Settings(BaseSettings):
     DOWNLOAD_METHOD_2: bool = True
     DOWNLOAD_FROM_FILE: bool = False
     LOCAL_LINK_TO_FILE: str = 'fox.jpg' #f153665413_t 244 116
-
+    INFO: bool = True
 # настройки ниже лучше не трогать
 
     USE_RANDOM_DELAY_IN_RUN: bool = True
