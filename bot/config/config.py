@@ -19,14 +19,14 @@ class Settings(BaseSettings):
     ENABLE_AUTO_UPGRADE: bool = True
 
     #IMAGE_LINK: str = 'https://app.notpx.app/assets/dungeon_4-B7Qp6JGr.png' #372 372
-    IMAGE_LINK: str = 'https://static.notpx.app/templates/153665413.png' #706 302 f511615987_t
-    X_OFFSET: int = 244 
-    Y_OFFSET: int = 116
-    DOWNLOAD_METHOD_2: bool = False
+    IMAGE_LINK: str = 'https://fra1.digitaloceanspaces.com/notpix-user-content/templates/511615987.png' 706 302 f511615987_t
+    X_OFFSET: int = 706 
+    Y_OFFSET: int = 302
+    DOWNLOAD_METHOD_2: bool = True
     DOWNLOAD_FROM_FILE: bool = False
     LOCAL_LINK_TO_FILE: str = 'fox.jpg' 
     USE_REF: bool = True
-    REF_ID: str = 'f153665413_t'
+    REF_ID: str = 'f511615987_t'
     INFO: bool = True
 
 # настройки ниже лучше не трогать
