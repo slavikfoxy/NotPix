@@ -958,9 +958,10 @@ class Tapper:
 
                 all_balance = await self.get_total_balance()
                 self.info(f"Баланс всех аккаунтов: <red>{'{:,.3f}'.format(all_balance)}</red>")
-
-                sys.exit(2)
-                
+                try:
+                    sys.exit(2)
+                except Exception as e:
+                    logger.error(f"<r>sys.exit(2): {e}</r>")
                 sleep_time = random.randint(settings.SLEEP_TIME_IN_MINUTES[0], settings.SLEEP_TIME_IN_MINUTES[1])
 
                 is_night = False
