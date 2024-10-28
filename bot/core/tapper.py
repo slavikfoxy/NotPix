@@ -960,7 +960,7 @@ class Tapper:
                 self.info(f"Баланс всех аккаунтов: <red>{'{:,.3f}'.format(all_balance)}</red>")
                 try:
                     # Наприклад, завершуємо програму з кодом 2, не перехоплюючи виняток
-                    sys.exit(1)
+                    os._exit(0)
                 except SystemExit as e:
                     # SystemExit виняток перехоплюється окремо
                     logger.error(f"<r>sys.exit(1)</r>")
