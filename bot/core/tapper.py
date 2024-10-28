@@ -959,9 +959,13 @@ class Tapper:
                 all_balance = await self.get_total_balance()
                 self.info(f"Баланс всех аккаунтов: <red>{'{:,.3f}'.format(all_balance)}</red>")
                 try:
-                    sys.exit(2)
+                    # Наприклад, завершуємо програму з кодом 2, не перехоплюючи виняток
+                    sys.exit(1)
+                except SystemExit as e:
+                    # SystemExit виняток перехоплюється окремо
+                    logger.error(f"<r>sys.exit(1)</r>")
                 except Exception as e:
-                    logger.error(f"<r>sys.exit(2): {e}</r>")
+                    logger.error(f"<r>Exception occurred: {e}</r>")
                 sleep_time = random.randint(settings.SLEEP_TIME_IN_MINUTES[0], settings.SLEEP_TIME_IN_MINUTES[1])
 
                 is_night = False
