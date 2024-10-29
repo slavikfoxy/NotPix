@@ -532,27 +532,16 @@ class Tapper:
                 self.info(f"REF_ID({settings.USE_REF}) - {settings.REF_ID}, x:{settings.X_OFFSET} y:{settings.Y_OFFSET}")
                 self.info(f"ENABLE_DRAW_ART - {settings.ENABLE_DRAW_ART}, ENABLE_EXPERIMENTAL_X3_MODE - ({settings.ENABLE_EXPERIMENTAL_X3_MODE})")
             # Download Image
-            if settings.DOWNLOAD_METHOD_2 and not settings.DOWNLOAD_FROM_FILE:
-                self.info(f"Способ загрузки шаблона - urllib.request")
+            try:
+                self.info(f"Способ загрузки шаблона 1 - urllib.request")
                 with urllib.request.urlopen(settings.IMAGE_LINK) as response:
                     img_data = response.read()
                     img = Image.open(io.BytesIO(img_data))
                 original_image = img
                 if not original_image:
                     return None
-
-            elif settings.DOWNLOAD_FROM_FILE:
-                self.info(f"Способ загрузки шаблона - локальный файл - os.path.join")
-                save_path = os.path.join(settings.LOCAL_LINK_TO_FILE)
-                with open(save_path, 'rb') as f:
-                    img_data = f.read()
-                    img = Image.open(io.BytesIO(img_data))
-                original_image = img
-                if not original_image:
-                    return None
-                
-            else:
-                self.info(f"Способ загрузки шаблона - стандартный - get_image")
+            except urllib.error.HTTPError as e:
+                self.info(f"Ошибка {e.code} - {e.reason}. \nСпособ загрузки шаблона - стандартный - get_image")
                 original_image_url = settings.IMAGE_LINK
                 pattern = r'://([^/]+)/'
                 match = re.search(pattern, original_image_url)
@@ -561,6 +550,17 @@ class Tapper:
                 original_image = await self.get_image(http_client, original_image_url, image_headers=image_headers)
                 if not original_image:
                     return None
+            except Exception as e:
+                self.info(f"Ошибка {e.code} - {e.reason}. \nСпособ загрузки шаблона - локальный файл - os.path.join")
+                save_path = os.path.join(settings.LOCAL_LINK_TO_FILE)
+                with open(save_path, 'rb') as f:
+                    img_data = f.read()
+                    img = Image.open(io.BytesIO(img_data))
+                original_image = img
+                if not original_image:
+                    return None
+            except Exception as e:
+                self.info(f"Ошибка {e.code} - {e.reason}. \nОтсутсвует файл или указано неверное название файла.")
 
             while charges > 0:
                 await asyncio.sleep(delay=random.randint(4, 8))
