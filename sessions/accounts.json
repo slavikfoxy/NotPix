@@ -1,7 +1,12 @@
 [
   {
-    "session_name": "HeyahFox",
-    "user_agent": "Mozilla/5.0 (Linux; Android 11.0; Pixel 3 XL) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.2.8486.59 Mobile Safari/537.36",
+    "session_name": "name_example",
+    "user_agent": "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.6422.165 Mobile Safari/537.36",
+    "proxy": "socks5://72.195.114.169:4145"
+  },
+  {
+    "session_name": "Krutkij",
+    "user_agent": "Mozilla/5.0 (Linux; Android 10.0; Nokia 8.3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.4450.49 Mobile Safari/537.36",
     "proxy": null
   }
 ]
