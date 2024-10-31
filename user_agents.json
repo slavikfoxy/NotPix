@@ -1,22 +1,18 @@
 [
     {
-        "session_name": "Orange",
-        "user_agent": "Mozilla/5.0 (Linux; Android 7.1; Pixel 4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.5993.80 Mobile Safari/537.36"
-    },
-    {
-        "session_name": "Toxxa",
-        "user_agent": "Mozilla/5.0 (Linux; Android 15.0; NE2210) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.6167.165 Mobile Safari/537.36"
-    },
-    {
         "session_name": "HeyahFox",
-        "user_agent": "Mozilla/5.0 (Linux; Android 12.0; SM-G990U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.6367.83 Mobile Safari/537.36"
+        "user_agent": "Mozilla/5.0 (Linux; Android 12.0; Redmi Note 12 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.5845.164 Mobile Safari/537.36"
     },
     {
-        "session_name": "KatyaPL",
-        "user_agent": "Mozilla/5.0 (Linux; Android 9.0; SM-N986B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.50 Mobile Safari/537.36"
+        "session_name": "Orange",
+        "user_agent": "Mozilla/5.0 (Linux; Android 8.0; SM-G980F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.5790.136 Mobile Safari/537.36"
     },
     {
         "session_name": "Krutkij",
-        "user_agent": "Mozilla/5.0 (Linux; Android 13.0; SM-N981B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.5615.100 Mobile Safari/537.36"
+        "user_agent": "Mozilla/5.0 (Linux; Android 7.0; SM-G996B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.5481.153 Mobile Safari/537.36"
+    },
+    {
+        "session_name": "Toxxa",
+        "user_agent": "Mozilla/5.0 (Linux; Android 7.1; J9210) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.122 Mobile Safari/537.36"
     }
 ]
