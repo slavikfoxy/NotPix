@@ -26,6 +26,7 @@ class Settings(BaseSettings):
     USE_REF: bool = True
     REF_ID: str = 'f511615987_t'
     INFO: bool = True
+
     """    
         IMAGE_LINK: str = 'https://fra1.digitaloceanspaces.com/notpix-user-content/templates/511615987.png' 
         X_OFFSET: int = 706 
@@ -42,6 +43,9 @@ class Settings(BaseSettings):
     RANDOM_DELAY_IN_RUN: list[int] = [1, 4]
 
     SLEEP_TIME_IN_MINUTES: list[int] = [30, 60]
+    
+    #Время за которое код перезапустится после ошибки 420_FLOOD_WAIT
+    FLOOD_WAIT_420_TIME: int = 30
 
     ENABLE_AUTO_JOIN_TO_SQUAD_CHANNEL: bool = True
     ENABLE_AUTO_JOIN_TO_SQUAD: bool = True
