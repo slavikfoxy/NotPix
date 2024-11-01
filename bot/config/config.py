@@ -51,7 +51,7 @@ class Settings(BaseSettings):
 
     DISABLE_IN_NIGHT: bool = True
     NIGHT_TIME: list[int] = [23, 5]
-
+    """
     DRAW_RANDOM_X_DIAPOSON: list[int] = [837, 948]
     DRAW_RANDOM_Y_DIAPOSON: list[int] = [242, 353]
     DRAW_RANDOM_COLORS: list[str] = ["#000000"]
@@ -65,11 +65,11 @@ class Settings(BaseSettings):
             'y': { 'type': 'random', 'value': [995, 999] }
         }
     ]
-
+    """
     ENABLE_SSL: bool = True
 
     BOOSTS_BLACK_LIST: list[str] = ['invite3frens', 'INVITE_FRIENDS', 'TON_TRANSACTION', 'BOOST_CHANNEL', 'ACTIVITY_CHALLENGE', 'CONNECT_WALLET']
-    TASKS_TODO_LIST: list[str] = ["x:notcoin", "x:notpixel","pumpkin", "paint20pixels", "leagueBonusSilver", "leagueBonusGold", "leagueBonusPlatinum", "boinkTask", "makePixelAvatar", "jettonTask", "channel:notpixel_channel", "channel:notcoin", "joinSquad"]
+    TASKS_TODO_LIST: list[str] = ["x:notcoin", "x:notpixel", "pumpkin", "nikolai", "paint20pixels", "leagueBonusSilver", "leagueBonusGold", "leagueBonusPlatinum", "boinkTask", "makePixelAvatar", "jettonTask", "channel:notpixel_channel", "channel:notcoin", "joinSquad"]
 
 
 settings = Settings()
