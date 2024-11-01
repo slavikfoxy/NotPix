@@ -2,7 +2,7 @@ name: "Auto NotPix Krutkij"
 
 on:
   schedule:
-    - cron: "9, 4-11 * 1 *"  # Minute/Hour/Day/Month/Weekday (UTC)
+    - cron: "20 12-22 * * *"  # Minute/Hour/Day/Month/Weekday (UTC)
   workflow_dispatch:
 permissions:
   contents: write
