@@ -2,7 +2,7 @@ name: "Auto NotPix KatyaPL"
 
 on:
   schedule:
-    - cron: "27 5-11 * 1 *"  # Minute/Hour/Day/Month/Weekday (UTC)
+    - cron: "27 5-11 * * *"  # Minute/Hour/Day/Month/Weekday (UTC)
   workflow_dispatch:
 permissions:
   contents: write
