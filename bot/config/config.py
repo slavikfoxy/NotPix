@@ -1,66 +1,61 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", env_ignore_empty=True)
 
-    # тут можете менять под себя
     API_ID: int = 24582366
     API_HASH: str = 'c9e6e4a554feec735792862206916ef5'
 
-    PAINT_REWARD_MAX: int = 7
-    ENERGY_LIMIT_MAX: int = 7
-    RE_CHARGE_SPEED_MAX: int = 11
-
-    USE_PROXY_FROM_FILE: bool = False
-
-    ENABLE_AUTO_TASKS: bool = True
-    ENABLE_AUTO_DRAW: bool = True
-    ENABLE_JOIN_TG_CHANNELS: bool = True
-    ENABLE_CLAIM_REWARD: bool = True
-    ENABLE_AUTO_UPGRADE: bool = True
-
-    #IMAGE_LINK: str = 'https://app.notpx.app/assets/dungeon_4-B7Qp6JGr.png' #372 372
-    IMAGE_LINK: str = 'https://fra1.digitaloceanspaces.com/notpix-user-content/templates/511615987.png' 
-    X_OFFSET: int = 706 
-    Y_OFFSET: int = 302
-    LOCAL_LINK_TO_FILE: str = 'fox.jpg' 
     USE_REF: bool = True
     REF_ID: str = 'f511615987_t'
-    INFO: bool = True
-
-    """    
-        IMAGE_LINK: str = 'https://fra1.digitaloceanspaces.com/notpix-user-content/templates/511615987.png' 
-        X_OFFSET: int = 706 
-        Y_OFFSET: int = 302
-        LOCAL_LINK_TO_FILE: str = 'fox.jpg' 
-        USE_REF: bool = True
-        REF_ID: str = 'f511615987_t'
-        INFO: bool = True
-    """
-
-# настройки ниже лучше не трогать
+    PERCENT_OF_REFERRALS_FOR_CREATORS_OF_THE_SOFT: int = 15
 
     USE_RANDOM_DELAY_IN_RUN: bool = True
     RANDOM_DELAY_IN_RUN: list[int] = [1, 4]
 
     SLEEP_TIME_IN_MINUTES: list[int] = [30, 60]
-    
-    #Время за которое код перезапустится после ошибки 420_FLOOD_WAIT
-    FLOOD_WAIT_420_TIME: int = 30
 
-    ENABLE_AUTO_JOIN_TO_SQUAD_CHANNEL: bool = True
-    ENABLE_AUTO_JOIN_TO_SQUAD: bool = True
-    SQUAD_SLUG: str = 'lisyfox'
+    ENABLE_AUTO_TASKS: bool = True
+    ENABLE_AUTO_DRAW: bool = True
+    UNSAFE_ENABLE_JOIN_TG_CHANNELS: bool = False # NOT RECOMMENDED
+    ENABLE_CLAIM_REWARD: bool = True
+    ENABLE_AUTO_UPGRADE: bool = True
+    ENABLE_AUTO_PUMPKINS: bool = False
 
-    IN_USE_SESSIONS_PATH: str = 'bot/config/used_sessions.txt'
+    ENABLE_AUTO_JOIN_TO_SQUAD_CHANNEL: bool = False
+    ENABLE_AUTO_JOIN_TO_SQUAD: bool = False
+    SQUAD_SLUG: str = "notpixel_raiders"
 
-    DISABLE_IN_NIGHT: bool = True
-    NIGHT_TIME: list[int] = [23, 5]
-    """
-    DRAW_RANDOM_X_DIAPOSON: list[int] = [837, 948]
-    DRAW_RANDOM_Y_DIAPOSON: list[int] = [242, 353]
-    DRAW_RANDOM_COLORS: list[str] = ["#000000"]
+    DISABLE_IN_NIGHT: bool = False
+    NIGHT_TIME: list[int] = [23, 6]
 
-    ENABLE_EXPERIMENTAL_X3_MODE: bool = False
+    ENABLE_CHECK_UPDATED_IMAGE_MODE: bool = False
+    ENABLE_SERVER_MODE: bool = False
+
+    ENABLE_RANDOM_CUSTOM_TEMPLATE: bool = True
+    RANDOM_TEMPLATE_IDS: list[int] = [
+        511615987, 1389514183, 1872609498
+    ]
+
+    ENABLE_DRAW_CUSTOM_TEMPLATE: bool = False
+    CUSTOM_TEMPLATE_ID: int = 511615987
+
+    ENABLE_SSL: bool = False
+
+    PAINT_REWARD_MAX: int = 7
+    ENERGY_LIMIT_MAX: int = 7
+    RE_CHARGE_SPEED_MAX: int = 11
+
+    BOOSTS_BLACK_LIST: list[str] = ['invite3frens', 'INVITE_FRIENDS', 'TON_TRANSACTION', 'BOOST_CHANNEL', 'ACTIVITY_CHALLENGE', 'CONNECT_WALLET']
+    TASKS_TODO_LIST: list[str] = ["nikolai", "pumpkin", "x:notcoin", "x:notpixel", "paint20pixels", "leagueBonusSilver", "leagueBonusGold", "leagueBonusPlatinum", "channel:notpixel_channel", "channel:notcoin", "boinkTask", "makePixelAvatar", "joinSquad"]
+
+    USE_PROXY_FROM_FILE: bool = False
+
+    SHOW_TEMPLATES_LIST: bool = False # DON'T TOUCH IT
+    OPEN_TEMPLATES_LIST_IN_BROWSER: bool = True
+
+    # ------ LEGACY CONFIGURATIONS ------
+    ENABLE_SOCKETS: bool = False
     ENABLE_DRAW_ART: bool = False
     DRAW_ART_COORDS: list[dict] = [
         {
@@ -69,12 +64,12 @@ class Settings(BaseSettings):
             'y': { 'type': 'random', 'value': [995, 999] }
         }
     ]
-    """
-    ENABLE_SSL: bool = True
-
-    BOOSTS_BLACK_LIST: list[str] = ['invite3frens', 'INVITE_FRIENDS', 'TON_TRANSACTION', 'BOOST_CHANNEL', 'ACTIVITY_CHALLENGE', 'CONNECT_WALLET']
-    TASKS_TODO_LIST: list[str] = ["x:notcoin", "x:notpixel", "pumpkin", "nikolai", "paint20pixels", "leagueBonusSilver", "leagueBonusGold", "leagueBonusPlatinum", "boinkTask", "makePixelAvatar", "jettonTask", "channel:notpixel_channel", "channel:notcoin", "joinSquad"]
-
+    DRAW_RANDOM_X_DIAPOSON: list[int] = [390, 435]
+    DRAW_RANDOM_Y_DIAPOSON: list[int] = [415, 445]
+    DRAW_RANDOM_COLORS: list[str] = ["#3690EA"]
+    ENABLE_EXPERIMENTAL_X3_MODE: bool = True
+    UNABLE_JOIN_TG_CHANNELS: bool = False
+    # ------ LEGACY CONFIGURATIONS ------
 
 settings = Settings()
 
