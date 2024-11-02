@@ -2,7 +2,7 @@ name: "Auto 3.0 NotPix Orange"
 
 on:
   schedule:
-    - cron: "38, 4-11 * 1 *"  # Minute/Hour/Day/Month/Weekday (UTC)
+    - cron: "38, 4-11 * * *"  # Minute/Hour/Day/Month/Weekday (UTC)
   workflow_dispatch:
 permissions:
   contents: write
