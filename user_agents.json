@@ -14,5 +14,9 @@
     {
         "session_name": "Toxxa",
         "user_agent": "Mozilla/5.0 (Linux; Android 7.1; J9210) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.122 Mobile Safari/537.36"
+    },
+    {
+        "session_name": "KatyaPL",
+        "user_agent": "Mozilla/5.0 (Linux; Android 8.0; SM-F916B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.6045.164 Mobile Safari/537.36"
     }
 ]
