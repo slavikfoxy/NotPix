@@ -1037,7 +1037,7 @@ class Tapper:
                         continue
         
                 except Exception as error:
-                    self.error(f"Unknown error: <light-yellow>{error}</light-yellow>")
+                    self.error(f"Unknown error: <light-yellow>{error} ::: {traceback.format_exc()}</light-yellow>")
         
 
 async def run_tapper(tg_client: Client, proxy: str | None):
