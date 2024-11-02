@@ -101,11 +101,17 @@ class Tapper:
         if os.path.exists(self.filename):
             with open(self.filename, 'r', encoding='utf-8') as file:
                 for line in file:
-                    name, bal = line.strip().split(',')
-                    sessions[name] = float(bal)
-    
+                    # Skip empty or malformed lines
+                    if ',' not in line:
+                        continue
+                    try:
+                        name, bal = line.strip().split(',')
+                        sessions[name] = float(bal)
+                    except ValueError:
+                        print(f"Skipping malformed line: {line.strip()}")
+        
         sessions[self.session_name] = balance
-    
+        
         with open(self.filename, 'w', encoding='utf-8') as file:
             for name, bal in sessions.items():
                 file.write(f"{name},{bal}\n")
