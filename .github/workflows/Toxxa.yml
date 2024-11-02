@@ -2,7 +2,7 @@ name: "Auto NotPix Toxxa"
 
 on:
   schedule:
-    - cron: "21, 4-11 * 1 *"  # Minute/Hour/Day/Month/Weekday (UTC)
+    - cron: "21, 4-11 * * *"  # Minute/Hour/Day/Month/Weekday (UTC)
   workflow_dispatch:
 permissions:
   contents: write
