@@ -598,7 +598,7 @@ class Tapper:
 
 
             while charges > 0:
-                await asyncio.sleep(delay=random.randint(4, 8))
+                await asyncio.sleep(delay=random.randint(1, 4))
 
                 # Основной шаблон 1000 х 1000
                 current_image_url = 'https://image.notpx.app/api/v2/image'
