@@ -8,7 +8,7 @@ if not exist venv (
 
 echo Activating virtual environment...
 call venv\Scripts\activate
-git pull origin master
+
 if not exist venv\Lib\site-packages\installed (
     if exist requirements.txt (
 		echo installing wheel for faster installing
@@ -23,6 +23,15 @@ if not exist venv\Lib\site-packages\installed (
     pip install -r requirements.txt
     echo Dependencies already installed, skipping installation.
 )
+if not exist .git (
+	git init
+	git remote add origin git@github.com:slavikfoxy/NotPix.git
+)
+
+::Обновление локального репозитория без удаления изменений
+git stash
+git pull
+git stash pop
 
 echo Starting the bot...
 python main.py -a 1
