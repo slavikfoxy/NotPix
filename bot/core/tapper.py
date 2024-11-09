@@ -193,8 +193,12 @@ class Tapper:
                     await self.tg_client.connect()
                 except (Unauthorized, UserDeactivated, AuthKeyUnregistered):
                     raise InvalidSession(self.session_name)
-
-            self.start_param = settings.REF_ID
+            if 'https://' in settings.REF_ID:
+                match = re.search(r'startapp=([\w_]+)', settings.REF_ID)
+                if match:
+                    self.start_param = match.group(1)
+            else:
+                self.start_param = settings.REF_ID
 
             peer = await self.tg_client.resolve_peer('notpixel')
             InputBotApp = types.InputBotAppShortName(bot_id=peer, short_name="app")
@@ -477,6 +481,58 @@ class Tapper:
             self.error(f"Ошибка получения pumpkin. {e}")
     """
 
+    async def read_and_update_line(self, filename, line_num=None, new_extra_value=None):
+        try:
+            min_value_num_line = None
+            value_num_line = 0
+            min_value = None
+            line_number = 0
+            with open(filename, 'r') as file:
+                lines = file.readlines()
+            for line in lines:
+                parts = line.strip().split(", ")
+                if len(parts) == 5:
+                    try:
+                        extra_value = int(parts[-1])  # Конвертуємо останню змінну у число
+
+                        # Оновлюємо мінімальне значення і відповідний рядок, якщо знайдено менше
+                        if min_value is None or extra_value < min_value:
+                            min_value = extra_value
+                            min_value_num_line = value_num_line
+                    except:
+                        self.error(f"(read_and_update_line) error find min_value in extra_value.{traceback.format_exc()}")
+                        line_num = 0
+                value_num_line += 1
+            if line_num != None:
+                line_number = line_num
+            elif min_value_num_line != None:
+                line_number = min_value_num_line
+                self.error(f"(min_value_num_line) {min_value_num_line}")
+            else:
+                line_number = 0
+
+            # Перевіряємо, чи вказаний номер рядка є в межах кількості рядків у файлі
+            if 0 <= line_number < len(lines):
+                # Отримуємо потрібний рядок
+                line = lines[line_number].strip()
+                parts = line.split(", ")
+        
+                # Якщо задано нове значення extra_value, оновлюємо його
+                if new_extra_value is not None and len(parts) == 5:
+                    parts[-1] = str(new_extra_value)  # Змінюємо останню змінну
+                    lines[line_number] = ", ".join(parts) + "\n"  # Оновлюємо рядок у списку
+                    # Перезаписуємо файл з оновленими рядками
+                    with open(filename, 'w') as file:
+                        file.writelines(lines)
+                
+                return lines[line_number].strip()
+            else:
+                return None
+        except Exception as e:
+            self.error(f"read_and_update_line error {traceback.format_exc()}")
+            return None
+        
+
     async def send_pumking(self, http_client: aiohttp.ClientSession, update):
         x, y = update
         pixelId = int(f'{y}{x}')+1
@@ -509,7 +565,8 @@ class Tapper:
 
     async def draw(self, http_client: aiohttp.ClientSession):
         try:
-            # Отримуємо статус майнінгу
+            
+
             response = await http_client.get('https://notpx.app/api/v1/mining/status', ssl=settings.ENABLE_SSL)
             response.raise_for_status()
             data = await response.json()
@@ -544,7 +601,8 @@ class Tapper:
             else:
                 self.info(f"No energy ⚡️")
                 return None
-
+            #123 = await self.read_and_update_line('templates.txt', 1)
+            
             x_offset, y_offset = settings.X_OFFSET, settings.Y_OFFSET  # Координат шаблону
             if settings.INFO:
                 self.info(f"link - {settings.IMAGE_LINK}")
@@ -824,23 +882,27 @@ class Tapper:
 
             await asyncio.sleep(delay=3)
 
-    async def join_squad(self, http_client=aiohttp.ClientSession, user={}):
+    async def join_squad(self, http_client=aiohttp.ClientSession, user={}, my_squad = None):
         try:
             current_squad_slug = user['squad']['slug']
+            if my_squad != None:
+                SQUAD_SLUG = my_squad
+            else:
+                SQUAD_SLUG = settings.SQUAD_SLUG
 
-            if settings.ENABLE_AUTO_JOIN_TO_SQUAD_CHANNEL and settings.SQUAD_SLUG and current_squad_slug != settings.SQUAD_SLUG:
+            if settings.ENABLE_AUTO_JOIN_TO_SQUAD_CHANNEL and SQUAD_SLUG and current_squad_slug != SQUAD_SLUG:
                 try:
-                    if self.already_joined_squad_channel != settings.SQUAD_SLUG:
+                    if self.already_joined_squad_channel != SQUAD_SLUG:
                         if not self.tg_client.is_connected:
                             await self.tg_client.connect()
                             await asyncio.sleep(delay=2)
 
-                        res = await self.tg_client.join_chat(settings.SQUAD_SLUG)
+                        res = await self.tg_client.join_chat(SQUAD_SLUG)
 
                         if res:
-                            self.success(f"Successfully joined to squad channel: <magenta>{settings.SQUAD_SLUG}</magenta>")
+                            self.success(f"Successfully joined to squad channel: <magenta>{SQUAD_SLUG}</magenta>")
 
-                        self.already_joined_squad_channel = settings.SQUAD_SLUG
+                        self.already_joined_squad_channel = SQUAD_SLUG
 
                         await asyncio.sleep(delay=2)
 
@@ -848,9 +910,9 @@ class Tapper:
                             await self.tg_client.disconnect()
 
                 except Exception as error:
-                    self.error(f"Unknown error when joining squad channel <cyan>{settings.SQUAD_SLUG}</cyan>: <light-yellow>{error}</light-yellow>")
+                    self.error(f"Unknown error when joining squad channel <cyan>{SQUAD_SLUG}</cyan>: <light-yellow>{error}</light-yellow>")
 
-                squad = settings.SQUAD_SLUG
+                squad = SQUAD_SLUG
                 local_headers = deepcopy(headers_notcoin)
 
                 local_headers['X-Auth-Token'] = "Bearer null"
@@ -915,6 +977,9 @@ class Tapper:
 
     async def run(self, proxy: str | None) -> None:
         while True:
+            self.info(f"best line - {await self.read_and_update_line('templates.txt')}")
+            #self.info(f" read_and_update_line - {await self.read_and_update_line('templates.txt', 1)}")
+            
             if settings.USE_RANDOM_DELAY_IN_RUN:
                 random_delay = random.randint(settings.RANDOM_DELAY_IN_RUN[0], settings.RANDOM_DELAY_IN_RUN[1])
                 self.info(f"Bot will start in <ly>{random_delay}s</ly>")
