@@ -1,11 +1,6 @@
 [
     {
-<<<<<<< Updated upstream
-        "session_name": "Toxxa",
-        "user_agent": "Mozilla/5.0 (Linux; Android 8.0; VOG-AL00) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.6367.171 Mobile Safari/537.36"
-=======
-        "session_name": "KatyaPL",
-        "user_agent": "Mozilla/5.0 (Linux; Android 11.0; SM-G980U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.5672.77 Mobile Safari/537.36"
->>>>>>> Stashed changes
+        "session_name": "Orange",
+        "user_agent": "Mozilla/5.0 (Linux; Android 7.1; Pixel 3 XL) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.6367.83 Mobile Safari/537.36"
     }
 ]
