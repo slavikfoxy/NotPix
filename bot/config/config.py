@@ -24,7 +24,7 @@ class Settings(BaseSettings):
     Y_OFFSET: int = 289
     LOCAL_LINK_TO_FILE: str = 'fox.jpg' 
     USE_REF: bool = True
-    REF_ID: str = 'https://t.me/notpixel/app?startapp=f775870547_t'
+    REF_ID: str = 'f775870547_t'
     INFO: bool = True
 
     """    
