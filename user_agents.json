@@ -8,7 +8,12 @@
         "user_agent": "Mozilla/5.0 (Linux; Android 13.0; Pixel 5a) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.5481.153 Mobile Safari/537.36"
     },
     {
+<<<<<<< Updated upstream
         "session_name": "Krutkij",
         "user_agent": "Mozilla/5.0 (Linux; Android 10.0; POCO M3 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.5845.163 Mobile Safari/537.36"
+=======
+        "session_name": "Toxxa",
+        "user_agent": "Mozilla/5.0 (Linux; Android 15.0; ANA-AL00) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.6167.164 Mobile Safari/537.36"
+>>>>>>> Stashed changes
     }
 ]
