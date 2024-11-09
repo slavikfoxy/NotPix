@@ -1,15 +1,6 @@
 [
     {
-        "session_name": "Orange",
-        "user_agent": "Mozilla/5.0 (Linux; Android 10.0; Pixel 6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.6045.53 Mobile Safari/537.36"
-    },
-    {
-<<<<<<< Updated upstream
-        "session_name": "HeyahFox",
-        "user_agent": "Mozilla/5.0 (Linux; Android 7.0; SM-G990) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.5790.136 Mobile Safari/537.36"
-=======
-        "session_name": "Krutkij",
-        "user_agent": "Mozilla/5.0 (Linux; Android 8.0; J9150) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.64 Mobile Safari/537.36"
->>>>>>> Stashed changes
+        "session_name": "Toxxa",
+        "user_agent": "Mozilla/5.0 (Linux; Android 8.0; VOG-AL00) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.6367.171 Mobile Safari/537.36"
     }
 ]
