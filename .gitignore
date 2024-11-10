@@ -11,3 +11,4 @@ __pycache__
 /sessions
 /Actual version
 Balances.txt
+user_agents.json
