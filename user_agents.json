@@ -2,5 +2,21 @@
     {
         "session_name": "Orange",
         "user_agent": "Mozilla/5.0 (Linux; Android 7.1; Pixel 3 XL) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.6367.83 Mobile Safari/537.36"
+    },
+    {
+        "session_name": "HeyahFox",
+        "user_agent": "Mozilla/5.0 (Linux; Android 9.0; Redmi Note 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.6099.144 Mobile Safari/537.36"
+    },
+    {
+        "session_name": "Krutkij",
+        "user_agent": "Mozilla/5.0 (Linux; Android 8.0; Mi 11) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.53 Mobile Safari/537.36"
+    },
+    {
+        "session_name": "Toxxa",
+        "user_agent": "Mozilla/5.0 (Linux; Android 15.0; SM-G980F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.5615.136 Mobile Safari/537.36"
+    },
+    {
+        "session_name": "KatyaPL",
+        "user_agent": "Mozilla/5.0 (Linux; Android 8.0; SM-G990U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.5481.153 Mobile Safari/537.36"
     }
 ]
