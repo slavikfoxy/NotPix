@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     ENABLE_AUTO_UPGRADE: bool = True
 
     TEMPLATES_FILE_MANUAL: bool = True
-    MISSPX_TO_NEXT_TEMPLATES: int = 2
+    MISSPX_TO_NEXT_TEMPLATES: int = 4
     IMAGE_LINK: str = 'https://fra1.digitaloceanspaces.com/notpix-user-content/templates/775870547.png' 
     X_OFFSET: int = 342 
     Y_OFFSET: int = 289
