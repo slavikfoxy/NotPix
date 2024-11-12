@@ -1,5 +1,10 @@
 HeyahFox,60539.01140016668
 Krutkij,67692.24451416668
 Orange,66844.38257916665
+<<<<<<< Updated upstream
 Toxxa,66995.56753100002
 KatyaPL,49894.06352416667
+=======
+Toxxa,66710.38817500003
+KatyaPL,49910.71988416667
+>>>>>>> Stashed changes
