@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     USE_PROXY_FROM_FILE: bool = False
 
     ENABLE_AUTO_TASKS: bool = True
-    ENABLE_AUTO_DRAW: bool = False
+    ENABLE_AUTO_DRAW: bool = True
     ENABLE_JOIN_TG_CHANNELS: bool = True
     ENABLE_CLAIM_REWARD: bool = True
     ENABLE_AUTO_UPGRADE: bool = True
@@ -35,7 +35,7 @@ class Settings(BaseSettings):
     USE_RANDOM_DELAY_IN_RUN: bool = True
     RANDOM_DELAY_IN_RUN: list[int] = [1, 4]
 
-    SLEEP_TIME_IN_MINUTES: list[int] = [30, 60]
+    SLEEP_TIME_IN_MINUTES: list[int] = [0, 3]
     
     #Время за которое код перезапустится после ошибки 420_FLOOD_WAIT
     FLOOD_WAIT_420_TIME: int = 30
